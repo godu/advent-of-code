@@ -1,62 +1,49 @@
-module Frequency =
-struct
-  type t = int
+let fold (initialValue: int) (frequencies: int list): int =
+  List.fold_left (+) initialValue frequencies
+let%test _ = 
+  [ 1; 1; 1 ]
+  |> fold 0
+  |> (=) 3
+let%test _ = 
+  [ 1; 1; -2 ]
+  |> fold 0
+  |> (=) 0
+let%test _ = 
+  [ -1; -2; -3 ]
+  |> fold 0
+  |> (=) (-6)
 
-  let id_element = 0
-  let compare = compare
+module Int_set =  Set.Make(
+  struct let compare = Pervasives.compare 
+    type t = int
+  end);;
 
-  let combine = (+)
-  let%test _ = combine 0 1 = 1
-  let%test _ = combine 1 (-2) = (-1)
-  let%test _ = combine (-1) 3 = 2
-  let%test _ = combine 2 1 = 3
-
-  let fold (initialValue: t) (frequencies: t list): t =
-    List.fold_left combine initialValue frequencies
-  let%test _ = 
-    [ 1; 1; 1 ]
-    |> fold id_element
-    |> (=) 3
-  let%test _ = 
-    [ 1; 1; -2 ]
-    |> fold id_element
-    |> (=) 0
-  let%test _ = 
-    [ -1; -2; -3 ]
-    |> fold id_element
-    |> (=) (-6)
-end
-
-module FrequencySet = Set.Make(Frequency)
-
-
-let part_1 (frequencies: Frequency.t list) =
+let part_1 (frequencies: int list) =
   frequencies
-  |> Frequency.fold Frequency.id_element
+  |> fold 0
 let%test _ = [ 1; 1; 1; 1; 1; -2; -1; -2; -3 ] |> part_1 |> (=) (-3)
 
-let part_2 (frequencies: Frequency.t list) =
+let part_2 (frequencies: int list) =
   frequencies
   |> Base.Sequence.repeat
   |> Base.Sequence.concat_map ~f: Base.Sequence.of_list
-  |> Base.Sequence.append (Base.Sequence.of_list [Frequency.id_element])
+  |> Base.Sequence.append (Base.Sequence.of_list [0])
   |>  Base.Sequence.folding_map
     ~init: 0
     ~f: (fun acc current -> 
-        let next = Frequency.combine acc current in
+        let next = (+) acc current in
         (next, next)
       )
   |> Base.Sequence.fold_until
-    ~init: FrequencySet.empty
+    ~init: Int_set.empty
     ~f: (fun set value -> 
-        if FrequencySet.mem value set
+        if Int_set.mem value set
         then
           Base.Continue_or_stop.Stop(value)
         else 
-          Base.Continue_or_stop.Continue(FrequencySet.add value set)
+          Base.Continue_or_stop.Continue(Int_set.add value set)
       )
     ~finish: (fun _ -> 0)
-
 let%test _ = [ 1; (-1) ] |> part_2 |> (=) 0
 let%test _ = [ 3; 3; 4; (-2); (-4) ] |> part_2 |> (=) 10
 let%test _ = [ (-6); 3; 8; 5; (-6) ] |> part_2 |> (=) 5
