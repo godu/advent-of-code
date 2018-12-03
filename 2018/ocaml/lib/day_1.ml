@@ -16,7 +16,7 @@ let%test _ =
 module Int_set =  Set.Make(
   struct let compare = Pervasives.compare 
     type t = int
-  end);;
+  end)
 
 let part_1 (frequencies: int list) =
   frequencies

@@ -14,5 +14,6 @@ run-test: ["dune" "runtest" "-p" name]
 
 depends: [
   "dune" {build}
+  "re"
   "ppx_inline_test" {with-test}
 ]
