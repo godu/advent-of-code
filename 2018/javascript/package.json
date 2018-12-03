@@ -1,0 +1,31 @@
+{
+  "name": "awesome-package",
+  "scripts": {
+    "test": " npm run eslint && ava",
+    "eslint": "eslint ./ *.js  --ext .js"
+  },
+  "devDependencies": {
+    "@ava/babel-preset-stage-4": "^2.0.0",
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-proposal-pipeline-operator": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "@coorpacademy/eslint-plugin-coorpacademy": "^8.1.1",
+    "ava": "1.0.0-rc.2",
+    "babel-eslint": "10.0.1",
+    "babel-loader": "^8.0.4",
+    "eslint": "5.9.0"
+  },
+  "ava": {
+    "files": [
+      "tests/**/*.js"
+    ],
+    "require": [
+      "@babel/register"
+    ]
+  },
+  "dependencies": {
+    "rxjs": "^6.3.3",
+    "rxjs-compat": "^6.3.3"
+  }
+}
