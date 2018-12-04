@@ -2,9 +2,7 @@
   "env": {
     "es6": true
   },
-
   "parser": "babel-eslint",
-
   "plugins": [
     "@coorpacademy/coorpacademy"
   ],
@@ -12,5 +10,8 @@
     "plugin:@coorpacademy/coorpacademy/core",
     "plugin:@coorpacademy/coorpacademy/es20XX",
     "plugin:@coorpacademy/coorpacademy/ava"
-  ]
+  ],
+  "rules": {
+    "no-shadow": "off"
+  }
 }
