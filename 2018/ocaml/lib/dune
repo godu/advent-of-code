@@ -1,5 +1,5 @@
 (library
   (name advent_of_code)
-  (libraries re)
+  (libraries re core_kernel)
   (inline_tests)
   (preprocess (pps ppx_inline_test)))
