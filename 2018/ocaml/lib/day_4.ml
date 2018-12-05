@@ -347,3 +347,65 @@ let%test _ =
   ]
   |> part_1
   |> (=) 240
+
+let find_most_asleep_minute (minutes_asleep: int list) =
+  minutes_asleep
+  |> List.sort ~compare:Int.compare
+  |> List.group ~break:(<>)
+  |> List.max_elt ~compare:(fun a b -> Int.compare (a |> List.length) (b |> List.length))
+  |> Base.Option.map ~f:(fun a -> (a |> List.hd_exn, a |> List.length))
+  |> Base.Option.value ~default:(0, 0)
+
+let%test _ =
+  [5; 6; 7; 3; 4; 5; 4; 5; 6;]
+  |> find_most_asleep_minute
+  |> (=) (5, 3)
+
+let part_2 (record_strings: string list): int =
+  record_strings
+  |> List.map ~f:record_of_string
+  |> List.sort ~compare:compare_records
+  |> group_by_shift
+  |> group_by_guard
+  |> List.map ~f:(fun (id, records) -> 
+      (
+        id,
+        records
+        |> group_by_sleep
+        |> List.map ~f:(minutes_asleep_of_records)
+        |> List.concat
+        |> List.map ~f:minute_of_time
+      )
+    )
+  |> List.map ~f:(fun (id, minutes_asleep) -> 
+      let (minute, count) = minutes_asleep |> find_most_asleep_minute in
+      (
+        id,
+        minute,
+        count
+      )
+    )
+  |> List.max_elt ~compare:(fun a b -> Int.compare (a |> Tuple3.get3) (b |> Tuple3.get3))
+  |> Base.Option.value_map ~default:0 ~f:(fun (id, minute, _) -> id * minute)
+let%test _ =
+  [  
+    "[1518-11-01 00:00] Guard #10 begins shift";
+    "[1518-11-01 00:05] falls asleep";
+    "[1518-11-01 00:25] wakes up";
+    "[1518-11-01 00:30] falls asleep";
+    "[1518-11-01 00:55] wakes up";
+    "[1518-11-01 23:58] Guard #99 begins shift";
+    "[1518-11-02 00:40] falls asleep";
+    "[1518-11-02 00:50] wakes up";
+    "[1518-11-03 00:05] Guard #10 begins shift";
+    "[1518-11-03 00:24] falls asleep";
+    "[1518-11-03 00:29] wakes up";
+    "[1518-11-04 00:02] Guard #99 begins shift";
+    "[1518-11-04 00:36] falls asleep";
+    "[1518-11-04 00:46] wakes up";
+    "[1518-11-05 00:03] Guard #99 begins shift";
+    "[1518-11-05 00:45] falls asleep";
+    "[1518-11-05 00:55] wakes up";
+  ]
+  |> part_2
+  |> (=) 4455 
