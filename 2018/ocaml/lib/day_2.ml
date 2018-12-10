@@ -1,3 +1,5 @@
+open Util
+
 module String_map = Map.Make(String)
 
 let process_word (word: string) =
@@ -56,7 +58,6 @@ let part_1 (words: string list): int =
   words
   |> process_words
 
-let (>>) f g x = x |> f |> g
 let list_of_string = String.to_seq >> List.of_seq >> List.map (String.make 1)
 
 let compare_two_words a b =

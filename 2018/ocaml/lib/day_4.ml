@@ -284,8 +284,6 @@ let%test _ =
     Time.of_string "1518-11-05 00:54";
   ]
 
-let (>>) f g x = x |> f |> g
-
 let time_regexp = Re.Pcre.regexp "^(\\d+)-(\\d+)-(\\d+) (\\d+):(\\d+)"
 let minute_of_time t =
   let matches =

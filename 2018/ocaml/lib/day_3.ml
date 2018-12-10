@@ -6,8 +6,6 @@ type claim = {
   height: int;
 }
 
-let (>>) f g x = x |> f |> g
-
 let claim_regexp = Re.Pcre.regexp "^#(\\d+) @ (\\d+),(\\d+): (\\d+)x(\\d+)$"
 
 let claim_of_string str =
