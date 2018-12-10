@@ -48,6 +48,11 @@ let main () =
   Input.day_5
   |> Day_5.part_2
   |> sprintf "Day5.2 : %d"
+  |> print_endline;
+
+  Input.day_6
+  |> Day_6.part_1
+  |> sprintf "Day6.1 : %d"
   |> print_endline
 
 let _ = main()
