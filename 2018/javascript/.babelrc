@@ -1,4 +1,0 @@
-{
-  "plugins": [["@babel/plugin-proposal-pipeline-operator", { "proposal": "minimal" }]],
-  "presets": ["@ava/babel-preset-stage-4"]
-}

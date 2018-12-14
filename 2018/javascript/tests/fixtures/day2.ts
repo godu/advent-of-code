@@ -1,4 +1,4 @@
-[
+export default [
   "rvefnvyxzbodgpnpkumawhijsc",
   "rvefqtyxzsddglnppumawhijsc",
   "rvefqtywzbodglnkkubawhijsc",
@@ -249,4 +249,4 @@
   "rcxfqtyxzbldglnpkumawhijsc",
   "rvetqtyxzbojglnpkumewhijsc",
   "rvxfqtyxzbtdglnpkbmawhijsc"
-]
+];
