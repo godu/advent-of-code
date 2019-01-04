@@ -1,9 +1,12 @@
 .PHONY: default run build test clean
 
-default: build
+default: install build
 
 run:
 	dune exec bin/main.exe
+
+install:
+	opam install .
 
 build:
 	dune build bin/main.exe
@@ -16,3 +19,6 @@ test-watch:
 
 clean:
 	dune clean
+
+lint:
+	dune promote
