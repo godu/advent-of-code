@@ -1,0 +1,8 @@
+{
+	"recommendations": [
+		"haskell.haskell",
+		"hoovercj.haskell-linter",
+		"justusadam.language-haskell"
+	],
+	"unwantedRecommendations": []
+}

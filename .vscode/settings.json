@@ -1,0 +1,5 @@
+{
+    "editor.formatOnSave": true,
+    "haskell.formattingProvider": "ormolu",
+    "haskell.languageServerVariant": "haskell-language-server"
+}

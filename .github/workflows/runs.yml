@@ -1,0 +1,31 @@
+name: Putting it Together 🎨
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source 📡
+        uses: actions/checkout@v2
+      - name: Cache Stack 📦
+        uses: actions/cache@v2
+        with:
+          path: ~/.stack
+          key: ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml.lock') }}-${{ hashFiles('**/package.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-stack-${{ hashFiles('**/stack.yaml.lock') }}-
+            ${{ runner.os }}-stack-
+      - name: Install Stack 📡
+        uses: actions/setup-haskell@v1
+        with:
+          ghc-version: 8.8.4
+          enable-stack: true
+          stack-version: "latest"
+      - name: Build ⚒
+        run: stack build
+      - name: Run 🚀
+        run: stack run

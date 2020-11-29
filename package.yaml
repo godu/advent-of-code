@@ -1,0 +1,43 @@
+name: advent-of-code
+version: 0.1.0.0
+github: "godu/advent-of-code-2020"
+license: BSD3
+author: Arthur Weber
+maintainer: arthur.weber@viacesi.fr
+
+extra-source-files:
+  - README.md
+
+description: |
+  Please see the README on GitHub
+  at <https://github.com/godu/advent-of-code-2020#readme>
+
+dependencies:
+  - base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  advent-of-code-exe:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -O2
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -fexcess-precision
+      - -optc-O3
+      - -optc-ffast-math
+      - -funfolding-use-threshold=16
+    dependencies:
+      - advent-of-code
+
+tests:
+  advent-of-code-test:
+    main: Spec.hs
+    source-dirs: test
+    dependencies:
+      - advent-of-code
+      - hspec
