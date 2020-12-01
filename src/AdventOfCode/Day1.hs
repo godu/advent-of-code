@@ -1,8 +1,9 @@
-{-# LANGUAGE TupleSections #-}
-
 module AdventOfCode.Day1
-  ( run,
-    process,
+  ( run1,
+    process1,
+    run2,
+    process2,
+    combinaisons,
   )
 where
 
@@ -23,16 +24,31 @@ instance Read Input where
               return (Input [])
           )
 
-combinaisons :: [a] -> [(a, a)]
-combinaisons [] = []
-combinaisons (a : as) = map (a,) as <> combinaisons as
+extract :: Input -> [Int]
+extract (Input x) = x
 
-run :: String -> String
-run = show . sum . fmap (uncurry (*)) . filter ((==) 2020 . uncurry (+)) . combinaisons . (\(Input x) -> x) . read
+combinaisons :: Int -> [a] -> [[a]]
+combinaisons _ [] = []
+combinaisons 0 xs = []
+combinaisons 1 xs = map (: []) xs
+combinaisons i (a : as) = map (a :) (combinaisons (i -1) as) <> combinaisons i as
 
-process :: [Int] -> Int
-process =
+run1 :: String -> String
+run1 = show . process1 . extract . read
+
+process1 :: [Int] -> Int
+process1 =
   sum
-    . fmap (uncurry (*))
-    . filter ((==) 2020 . uncurry (+))
-    . combinaisons
+    . fmap product
+    . filter ((==) 2020 . sum)
+    . combinaisons 2
+
+run2 :: String -> String
+run2 = show . process2 . extract . read
+
+process2 :: [Int] -> Int
+process2 =
+  sum
+    . fmap product
+    . filter ((==) 2020 . sum)
+    . combinaisons 3
