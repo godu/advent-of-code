@@ -25,7 +25,11 @@ jobs:
           ghc-version: 8.8.4
           enable-stack: true
           stack-version: "latest"
+      - name: Install HLint 📡
+        run: stack install hlint
       - name: Build ⚒
         run: stack build --test --no-run-tests
+      - name: Lint 📝
+        run: hlint .
       - name: Test 🚧
         run: stack test

@@ -16,6 +16,7 @@ $ stack install hlint ormolu
 ## Test
 
 ```shell
+$ hlint .
 $ stack test [--file-watch --fast]
 ```
 
