@@ -27,9 +27,13 @@ jobs:
           stack-version: "latest"
       - name: Install HLint 📡
         run: stack install hlint
+      - name: Install Ormolu 📡
+        run: stack install ormolu
       - name: Build ⚒
         run: stack build --test --no-run-tests
       - name: Lint 📝
         run: hlint .
+      - name: Styling 💅
+        run: ormolu --color always --check-idempotence --mode check **/*.hs
       - name: Test 🚧
         run: stack test

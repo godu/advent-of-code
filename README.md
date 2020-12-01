@@ -17,6 +17,7 @@ $ stack install hlint ormolu
 
 ```shell
 $ hlint .
+$ ormolu --color always --check-idempotence --mode check **/*.hs
 $ stack test [--file-watch --fast]
 ```
 
