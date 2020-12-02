@@ -10,6 +10,7 @@ where
 import Data.Ix
   ( Ix (inRange),
   )
+import Data.List (elemIndices)
 import Text.Read
   ( Lexeme (Ident, Symbol),
     Read (readPrec),
@@ -46,7 +47,13 @@ process1 = length . filter isValid
         count = length $ filter (== char) password
 
 run2 :: String -> String
-run2 = id
+run2 = show . process2 . fmap (read :: String -> Input) . lines
 
-process2 :: Int -> Int
-process2 = id
+process2 :: [Input] -> Int
+process2 = length . filter isValid
+  where
+    isValid :: Input -> Bool
+    isValid (Input min max char password) = minIsValid /= maxIsValid
+      where
+        minIsValid = (min <= length password) && char == (password !! (min - 1))
+        maxIsValid = (max <= length password) && char == (password !! (max - 1))
