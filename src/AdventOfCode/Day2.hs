@@ -10,7 +10,6 @@ where
 import Data.Ix
   ( Ix (inRange),
   )
-import Data.List (elemIndices)
 import Text.Read
   ( Lexeme (Ident, Symbol),
     Read (readPrec),

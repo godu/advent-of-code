@@ -7,8 +7,6 @@ module AdventOfCode.Day1
   )
 where
 
-import Data.List (sortOn)
-import Text.ParserCombinators.ReadPrec ((+++))
 import Text.Read (Read (readPrec))
 
 newtype Input = Input Int deriving (Show)
