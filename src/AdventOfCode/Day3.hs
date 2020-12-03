@@ -8,7 +8,7 @@ where
 
 import Data.List (unfoldr)
 
-data Square = Tree | Open deriving (Show)
+data Square = Tree | Open deriving (Eq)
 
 readSquare :: Char -> Square
 readSquare '#' = Tree
@@ -17,24 +17,20 @@ readSquare _ = Open
 readGrid :: String -> [[Square]]
 readGrid = map (map readSquare) . lines
 
-isTree :: Square -> Bool
-isTree Tree = True
-isTree _ = False
-
 run1 :: String -> String
 run1 = show . process1 1 3 . readGrid
 
 process1 :: Int -> Int -> [[Square]] -> Int
-process1 dx dy grid = sum $ unfoldr go (0, 0)
+process1 dx dy grid = length $ filter (== Tree) $ unfoldr go (0, 0)
   where
     nbRow = length grid
     nbColumn = length $ head grid
-    go :: (Int, Int) -> Maybe (Int, (Int, Int))
+    go :: (Int, Int) -> Maybe (Square, (Int, Int))
     go (x, y)
       | x >= nbRow = Nothing
       | otherwise =
         return
-          ( if isTree $ grid !! x !! y then 1 else 0,
+          ( grid !! x !! y,
             (x + dx, (y + dy) `mod` nbColumn)
           )
 
