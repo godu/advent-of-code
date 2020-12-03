@@ -17,8 +17,6 @@ import Test.Hspec
 
 spec :: Spec
 spec = do
-  -- it "process1" $ do
-  --   process1 0 `shouldBe` 0
   it "run1" $ do
     run1
       "..##.......\n\
@@ -33,7 +31,17 @@ spec = do
       \#...##....#\n\
       \.#..#...#.#"
       `shouldBe` "7"
-  it "process2" $ do
-    process2 0 `shouldBe` 0
   it "run2" $ do
-    run2 "0" `shouldBe` "0"
+    run2
+      "..##.......\n\
+      \#...#...#..\n\
+      \.#....#..#.\n\
+      \..#.#...#.#\n\
+      \.#...##..#.\n\
+      \..#.##.....\n\
+      \.#.#.#....#\n\
+      \.#........#\n\
+      \#.##...#...\n\
+      \#...##....#\n\
+      \.#..#...#.#"
+      `shouldBe` "336"

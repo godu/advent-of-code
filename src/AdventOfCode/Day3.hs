@@ -6,7 +6,7 @@ module AdventOfCode.Day3
   )
 where
 
-import Text.Read (Read (readPrec))
+import Data.List (unfoldr)
 
 data Square = Tree | Open deriving (Show)
 
@@ -14,30 +14,35 @@ readSquare :: Char -> Square
 readSquare '#' = Tree
 readSquare _ = Open
 
-run1 :: String -> String
-run1 = show . process1 . map (map readSquare) . lines
+readGrid :: String -> [[Square]]
+readGrid = map (map readSquare) . lines
 
-process1 :: [[Square]] -> Int
-process1 grid = go grid (0, 0) 0
+isTree :: Square -> Bool
+isTree Tree = True
+isTree _ = False
+
+run1 :: String -> String
+run1 = show . process1 1 3 . readGrid
+
+process1 :: Int -> Int -> [[Square]] -> Int
+process1 dx dy grid = sum $ unfoldr go (0, 0)
   where
     nbRow = length grid
     nbColumn = length $ head grid
-    go :: [[Square]] -> (Int, Int) -> Int -> Int
-    go _ (x, _) trees | x == nbRow = trees
-    go grid (x, y) trees =
-      go
-        grid
-        (x + 1, (y + 3) `mod` nbColumn)
-        nextTrees
-      where
-        square = grid !! x !! y
-        nextTrees = case square of
-          Tree -> trees + 1
-          Open -> trees
+    go :: (Int, Int) -> Maybe (Int, (Int, Int))
+    go (x, y)
+      | x >= nbRow = Nothing
+      | otherwise =
+        return
+          ( if isTree $ grid !! x !! y then 1 else 0,
+            (x + dx, (y + dy) `mod` nbColumn)
+          )
 
 run2 :: String -> String
--- run2 = show . read
-run2 = id
+run2 = show . process2 . readGrid
 
-process2 :: Int -> Int
-process2 = id
+process2 :: [[Square]] -> Int
+process2 grid =
+  product $
+    (\(dx, dy) -> process1 dx dy grid)
+      <$> [(1, 1), (1, 3), (1, 5), (1, 7), (2, 1)]
