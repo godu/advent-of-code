@@ -1,10 +1,16 @@
 module AdventOfCode.Day4
-  ( run1,
+  ( Passport (..),
+    run1,
     run2,
+    process1,
     process2,
   )
 where
 
+import Control.Applicative (Applicative (liftA2))
+import Data.Bifunctor (Bifunctor (first))
+import Data.Char (isDigit, isHexDigit)
+import Data.Ix (Ix (inRange))
 import Data.List.Extra (splitOn)
 import Data.Maybe (mapMaybe)
 import Text.Read
@@ -43,18 +49,18 @@ data Passport = Passport
     passportId :: String,
     countryId :: Maybe String
   }
-  deriving (Show)
+  deriving (Show, Eq)
 
 toPassport :: [Field] -> Maybe Passport
 toPassport fields =
-  case ( getBirthYear fields,
-         getIssueYear fields,
-         getExpirationYear fields,
-         getHeight fields,
-         getHairColor fields,
-         getEyeColor fields,
-         getPassportId fields,
-         getCountryId fields
+  case ( foldMap getBirthYear fields,
+         foldMap getIssueYear fields,
+         foldMap getExpirationYear fields,
+         foldMap getHeight fields,
+         foldMap getHairColor fields,
+         foldMap getEyeColor fields,
+         foldMap getPassportId fields,
+         foldMap getCountryId fields
        ) of
     ( Just birthYear,
       Just issueYear,
@@ -77,80 +83,113 @@ toPassport fields =
             countryId
     _ -> Nothing
   where
-    getBirthYear :: [Field] -> Maybe String
-    getBirthYear =
-      foldl
-        ( \acc field -> case (acc, field) of
-            (Nothing, BirthYear x) -> Just x
-            (x, _) -> x
-        )
-        Nothing
-    getIssueYear :: [Field] -> Maybe String
-    getIssueYear =
-      foldl
-        ( \acc field -> case (acc, field) of
-            (Nothing, IssueYear x) -> Just x
-            (x, _) -> x
-        )
-        Nothing
-    getExpirationYear :: [Field] -> Maybe String
-    getExpirationYear =
-      foldl
-        ( \acc field -> case (acc, field) of
-            (Nothing, ExpirationYear x) -> Just x
-            (x, _) -> x
-        )
-        Nothing
-    getHeight :: [Field] -> Maybe String
-    getHeight =
-      foldl
-        ( \acc field -> case (acc, field) of
-            (Nothing, Height x) -> Just x
-            (x, _) -> x
-        )
-        Nothing
-    getHairColor :: [Field] -> Maybe String
-    getHairColor =
-      foldl
-        ( \acc field -> case (acc, field) of
-            (Nothing, HairColor x) -> Just x
-            (x, _) -> x
-        )
-        Nothing
-    getEyeColor :: [Field] -> Maybe String
-    getEyeColor =
-      foldl
-        ( \acc field -> case (acc, field) of
-            (Nothing, EyeColor x) -> Just x
-            (x, _) -> x
-        )
-        Nothing
-    getPassportId :: [Field] -> Maybe String
-    getPassportId =
-      foldl
-        ( \acc field -> case (acc, field) of
-            (Nothing, PassportId x) -> Just x
-            (x, _) -> x
-        )
-        Nothing
-    getCountryId :: [Field] -> Maybe String
-    getCountryId =
-      foldl
-        ( \acc field -> case (acc, field) of
-            (Nothing, CountryId x) -> Just x
-            (x, _) -> x
-        )
-        Nothing
+    getBirthYear :: Field -> Maybe String
+    getBirthYear (BirthYear x) = Just x
+    getBirthYear _ = Nothing
+
+    getIssueYear :: Field -> Maybe String
+    getIssueYear (IssueYear x) = Just x
+    getIssueYear _ = Nothing
+
+    getExpirationYear :: Field -> Maybe String
+    getExpirationYear (ExpirationYear x) = Just x
+    getExpirationYear _ = Nothing
+
+    getHeight :: Field -> Maybe String
+    getHeight (Height x) = Just x
+    getHeight _ = Nothing
+
+    getHairColor :: Field -> Maybe String
+    getHairColor (HairColor x) = Just x
+    getHairColor _ = Nothing
+
+    getEyeColor :: Field -> Maybe String
+    getEyeColor (EyeColor x) = Just x
+    getEyeColor _ = Nothing
+
+    getPassportId :: Field -> Maybe String
+    getPassportId (PassportId x) = Just x
+    getPassportId _ = Nothing
+
+    getCountryId :: Field -> Maybe String
+    getCountryId (CountryId x) = Just x
+    getCountryId _ = Nothing
 
 run1 :: String -> String
 run1 =
   show
     . length
-    . mapMaybe (toPassport . mapMaybe (toField . splitOn ":") . words)
+    . mapMaybe process1
     . splitOn "\n\n"
 
-run2 :: String -> String
-run2 = id
+process1 :: String -> Maybe Passport
+process1 = toPassport . mapMaybe (toField . splitOn ":") . words
 
-process2 :: Int -> Int
-process2 = id
+run2 :: String -> String
+run2 =
+  show
+    . length
+    . mapMaybe process2
+    . splitOn "\n\n"
+
+(<?>) :: (t -> Bool) -> (t -> Bool) -> t -> Bool
+a <?> b = liftA2 (&&) a b
+
+process2 :: String -> Maybe Passport
+process2 =
+  filter
+    ( isPassportIdValid
+        <?> isEyeColorValid
+        <?> isHairColorValid
+        <?> isHeightValid
+        <?> isExpirationYearValid
+        <?> isIssueYearValid
+        <?> isBirthYearValid
+    )
+    . process1
+  where
+    filter predicate =
+      maybe
+        Nothing
+        (\p -> if predicate p then Just p else Nothing)
+
+    isBirthYearValid (Passport [a, b, c, d] _ _ _ _ _ _ _) =
+      maybe
+        False
+        (inRange (1920, 2002))
+        $ readMaybe [a, b, c, d]
+    isBirthYearValid _ = False
+
+    isIssueYearValid (Passport _ [a, b, c, d] _ _ _ _ _ _) =
+      maybe
+        False
+        (inRange (2010, 2020))
+        $ readMaybe [a, b, c, d]
+    isIssueYearValid _ = False
+
+    isExpirationYearValid (Passport _ _ [a, b, c, d] _ _ _ _ _) =
+      maybe
+        False
+        (inRange (2020, 2030))
+        $ readMaybe [a, b, c, d]
+    isExpirationYearValid _ = False
+
+    isHeightValid (Passport _ _ _ h _ _ _ _) = case first readMaybe $ span isDigit h of
+      (Just value, "cm") -> inRange (150, 193) value
+      (Just value, "in") -> inRange (59, 76) value
+      _ -> False
+
+    isHairColorValid (Passport _ _ _ _ ['#', b, c, d, e, f, g] _ _ _) = all isHexDigit [b, c, d, e, f, g]
+    isHairColorValid _ = False
+
+    isEyeColorValid (Passport _ _ _ _ _ "amb" _ _) = True
+    isEyeColorValid (Passport _ _ _ _ _ "blu" _ _) = True
+    isEyeColorValid (Passport _ _ _ _ _ "brn" _ _) = True
+    isEyeColorValid (Passport _ _ _ _ _ "gry" _ _) = True
+    isEyeColorValid (Passport _ _ _ _ _ "grn" _ _) = True
+    isEyeColorValid (Passport _ _ _ _ _ "hzl" _ _) = True
+    isEyeColorValid (Passport _ _ _ _ _ "oth" _ _) = True
+    isEyeColorValid _ = False
+
+    isPassportIdValid (Passport _ _ _ _ _ _ [a, b, c, d, e, f, g, h, i] _) = all isDigit [a, b, c, d, e, f, g, h, i]
+    isPassportIdValid _ = False
