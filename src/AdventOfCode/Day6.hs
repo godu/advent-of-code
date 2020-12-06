@@ -1,27 +1,29 @@
 module AdventOfCode.Day6
   ( run1,
     run2,
-    process2,
+    process,
   )
 where
 
-import Data.List (nub)
+import Data.List (intersect, nub, union)
 import Data.List.Extra (splitOn)
 
 run1 :: String -> String
 run1 =
   show
-    . sum
+    . process ((nub .) . union)
+
+run2 :: String -> String
+run2 =
+  show
+    . process intersect
+
+process :: ([Char] -> [Char] -> [Char]) -> String -> Int
+process append =
+  sum
     . fmap
       ( length
-          . nub
-          . concat
+          . foldl1 append
           . lines
       )
     . splitOn "\n\n"
-
-run2 :: String -> String
-run2 = id
-
-process2 :: Int -> Int
-process2 = id
