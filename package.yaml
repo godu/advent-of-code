@@ -19,6 +19,7 @@ library:
   source-dirs: src
   dependencies:
     - extra
+    - containers
 
 executables:
   advent-of-code-exe:
@@ -43,3 +44,4 @@ tests:
     dependencies:
       - advent-of-code
       - hspec
+      - containers
