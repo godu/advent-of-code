@@ -6,8 +6,7 @@ where
 import AdventOfCode.Day7
   ( Bag,
     Rules,
-    process1,
-    process2,
+    isContainedIn,
     ruleParser,
     rulesParser,
     run1,
@@ -74,16 +73,16 @@ spec = do
           \dotted black bags contain no other bags.\n"
       )
       `shouldBe` [(rules, "")]
-  it "process1" $ do
-    process1 rules "shiny gold" "light red" `shouldBe` True
-    process1 rules "shiny gold" "dark orange" `shouldBe` True
-    process1 rules "shiny gold" "bright white" `shouldBe` True
-    process1 rules "shiny gold" "muted yellow" `shouldBe` True
-    process1 rules "shiny gold" "shiny gold" `shouldBe` False
-    process1 rules "shiny gold" "dark olive" `shouldBe` False
-    process1 rules "shiny gold" "vibrant plum" `shouldBe` False
-    process1 rules "shiny gold" "faded blue" `shouldBe` False
-    process1 rules "shiny gold" "dotted black" `shouldBe` False
+  it "isContainedIn" $ do
+    isContainedIn rules "shiny gold" "light red" `shouldBe` True
+    isContainedIn rules "shiny gold" "dark orange" `shouldBe` True
+    isContainedIn rules "shiny gold" "bright white" `shouldBe` True
+    isContainedIn rules "shiny gold" "muted yellow" `shouldBe` True
+    isContainedIn rules "shiny gold" "shiny gold" `shouldBe` False
+    isContainedIn rules "shiny gold" "dark olive" `shouldBe` False
+    isContainedIn rules "shiny gold" "vibrant plum" `shouldBe` False
+    isContainedIn rules "shiny gold" "faded blue" `shouldBe` False
+    isContainedIn rules "shiny gold" "dotted black" `shouldBe` False
   it "run1" $ do
     run1
       "light red bags contain 1 bright white bag, 2 muted yellow bags.\n\
@@ -96,7 +95,14 @@ spec = do
       \faded blue bags contain no other bags.\n\
       \dotted black bags contain no other bags.\n"
       `shouldBe` "4"
-  it "process2" $ do
-    process2 0 `shouldBe` 0
+
   it "run2" $ do
-    run2 "0" `shouldBe` "0"
+    run2
+      "shiny gold bags contain 2 dark red bags.\n\
+      \dark red bags contain 2 dark orange bags.\n\
+      \dark orange bags contain 2 dark yellow bags.\n\
+      \dark yellow bags contain 2 dark green bags.\n\
+      \dark green bags contain 2 dark blue bags.\n\
+      \dark blue bags contain 2 dark violet bags.\n\
+      \dark violet bags contain no other bags.\n"
+      `shouldBe` "126"

@@ -1,8 +1,7 @@
 module AdventOfCode.Day7
   ( run1,
-    process1,
+    isContainedIn,
     run2,
-    process2,
     Bag,
     Rules,
     ruleParser,
@@ -65,21 +64,27 @@ readRules :: String -> Rules
 readRules = fromList . fmap (fst . head . readPrec_to_S ruleParser minPrec) . lines
 
 run1 :: String -> String
-run1 input = show $ length $ filter (process1 rules "shiny gold") $ keys rules
+run1 input = show $ length $ filter (isContainedIn rules "shiny gold") $ keys rules
   where
     rules = readRules input
 
-process1 :: Rules -> Bag -> Bag -> Bool
-process1 rules content container = elem content $ concat $ unfoldr go [container]
+isContainedIn :: Rules -> Bag -> Bag -> Bool
+isContainedIn rules content container = elem content $ concat $ unfoldr go [container]
   where
     go [] = Nothing
-    go (x : xs) =
-      return (bags, nub $ xs <> bags)
+    go (x : xs) = return (bags, nub $ bags <> xs)
+      where
+        bags = rules ! x
+
+unwrap :: Rules -> Bag -> [Bag]
+unwrap rules container = concat $ unfoldr go [container]
+  where
+    go [] = Nothing
+    go (x : xs) = return (bags, bags <> xs)
       where
         bags = rules ! x
 
 run2 :: String -> String
-run2 = id
-
-process2 :: Int -> Int
-process2 = id
+run2 input = show $ length $ unwrap rules "shiny gold"
+  where
+    rules = readRules input
