@@ -20,6 +20,7 @@ library:
   dependencies:
     - extra
     - containers
+    - vector
 
 executables:
   advent-of-code-exe:
