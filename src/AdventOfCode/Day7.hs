@@ -9,10 +9,11 @@ module AdventOfCode.Day7
   )
 where
 
+import AdventOfCode.Utils (read')
 import Data.List (nub, unfoldr)
-import Data.Map (Map, empty, fromList, keys, (!))
+import Data.Map (Map, fromList, keys, (!))
 import Text.ParserCombinators.ReadP (choice, sepBy, skipSpaces, string)
-import Text.ParserCombinators.ReadPrec (ReadPrec, minPrec, readPrec_to_P, readPrec_to_S)
+import Text.ParserCombinators.ReadPrec (ReadPrec, minPrec, readPrec_to_P)
 import Text.Read (Lexeme (Ident), lexP, lift, readPrec)
 
 type Bag = String
@@ -61,7 +62,7 @@ rulesParser = do
   return $ fromList rules
 
 readRules :: String -> Rules
-readRules = fromList . fmap (fst . head . readPrec_to_S ruleParser minPrec) . lines
+readRules = fromList . fmap (read' ruleParser) . lines
 
 run1 :: String -> String
 run1 input = show $ length $ filter (isContainedIn rules "shiny gold") $ keys rules
