@@ -46,6 +46,10 @@ spec = do
       \576\n"
       `shouldBe` "0"
   it "process2" $ do
-    process2 0 `shouldBe` 0
-  it "run2" $ do
-    run2 "0" `shouldBe` "0"
+    process2
+      5
+      [35, 20, 15, 25, 47, 40, 62, 55, 65, 95, 102, 117, 150, 182, 127, 219, 299, 277, 309, 576]
+      `shouldBe` return 62
+
+-- it "run2" $ do
+--   run2 "0" `shouldBe` "0"

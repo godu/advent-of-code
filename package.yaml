@@ -21,6 +21,7 @@ library:
     - extra
     - containers
     - vector
+    - split
 
 executables:
   advent-of-code-exe:
