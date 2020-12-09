@@ -11,6 +11,7 @@ import qualified AdventOfCode.Day5 as Day5 (run1, run2)
 import qualified AdventOfCode.Day6 as Day6 (run1, run2)
 import qualified AdventOfCode.Day7 as Day7 (run1, run2)
 import qualified AdventOfCode.Day8 as Day8 (run1, run2)
+import qualified AdventOfCode.Day9 as Day9 (run1, run2)
 import Prelude
 
 main :: IO ()
@@ -54,3 +55,9 @@ main = do
   fixture <- readFile "app/Inputs/Day8.txt"
   print $ "Result #1: " <> Day8.run1 fixture
   print $ "Result #2: " <> Day8.run2 fixture
+
+  print "Day9"
+  fixture <- readFile "app/Inputs/Day9.txt"
+  print $ "Result #1: " <> Day9.run1 fixture
+
+-- print $ "Result #2: " <> Day9.run2 fixture
