@@ -7,6 +7,8 @@ module AdventOfCode.Day10
 where
 
 import Data.List (sort)
+import Data.List.Split (splitOn)
+import Data.Tuple (swap)
 
 pairs :: [a] -> [(a, a)]
 pairs [] = []
@@ -17,9 +19,8 @@ process1 :: [Int] -> Int
 process1 =
   uncurry (*)
     . foldl go (0, 1)
-    . fmap (uncurry (-))
+    . fmap (uncurry (-) . swap)
     . pairs
-    . reverse
     . sort
     . (0 :)
   where
@@ -31,8 +32,20 @@ process1 =
 run1 :: String -> String
 run1 = show . process1 . fmap read . lines
 
-process2 :: Int -> Int
-process2 = id
+arrangements :: [Int] -> Int
+arrangements (x: y: xs) | x + y <=3 = arrangements (y: xs)  + arrangements (x + y : xs)
+arrangements (_ : xs) = arrangements xs
+arrangements _ = 1
+
+process2 :: [Int] -> Int
+process2 =
+  product
+    . fmap arrangements
+    . splitOn [3]
+    . fmap (uncurry (-) . swap)
+    . pairs
+    . sort
+    . (0 :)
 
 run2 :: String -> String
-run2 = id
+run2 = show . process2 . fmap read . lines
