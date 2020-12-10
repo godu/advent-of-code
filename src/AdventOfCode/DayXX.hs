@@ -6,14 +6,14 @@ module AdventOfCode.DayXX
   )
 where
 
-run1 :: String -> String
-run1 = id
-
 process1 :: Int -> Int
 process1 = id
 
-run2 :: String -> String
-run2 = id
+run1 :: String -> String
+run1 = id
 
 process2 :: Int -> Int
 process2 = id
+
+run2 :: String -> String
+run2 = id
