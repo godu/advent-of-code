@@ -1,9 +1,9 @@
-module AdventOfCode.Day7Spec
+module AdventOfCode.Day07Spec
   ( spec,
   )
 where
 
-import AdventOfCode.Day7
+import AdventOfCode.Day07
   ( Bag,
     Rules,
     isContainedIn,

@@ -3,60 +3,60 @@ module Main
   )
 where
 
-import qualified AdventOfCode.Day1 as Day1 (run1, run2)
-import qualified AdventOfCode.Day2 as Day2 (run1, run2)
-import qualified AdventOfCode.Day3 as Day3 (run1, run2)
-import qualified AdventOfCode.Day4 as Day4 (run1, run2)
-import qualified AdventOfCode.Day5 as Day5 (run1, run2)
-import qualified AdventOfCode.Day6 as Day6 (run1, run2)
-import qualified AdventOfCode.Day7 as Day7 (run1, run2)
-import qualified AdventOfCode.Day8 as Day8 (run1, run2)
-import qualified AdventOfCode.Day9 as Day9 (run1, run2)
+import qualified AdventOfCode.Day01 as Day01 (run1, run2)
+import qualified AdventOfCode.Day02 as Day02 (run1, run2)
+import qualified AdventOfCode.Day03 as Day03 (run1, run2)
+import qualified AdventOfCode.Day04 as Day04 (run1, run2)
+import qualified AdventOfCode.Day05 as Day05 (run1, run2)
+import qualified AdventOfCode.Day06 as Day06 (run1, run2)
+import qualified AdventOfCode.Day07 as Day07 (run1, run2)
+import qualified AdventOfCode.Day08 as Day08 (run1, run2)
+import qualified AdventOfCode.Day09 as Day09 (run1, run2)
 import Prelude
 
 main :: IO ()
 main = do
-  print "Day1"
-  fixture <- readFile "app/Inputs/Day1.txt"
-  print $ "Result #1: " <> Day1.run1 fixture
-  print $ "Result #2: " <> Day1.run2 fixture
+  print "Day01"
+  fixture <- readFile "app/Inputs/Day01.txt"
+  print $ "Result #1: " <> Day01.run1 fixture
+  print $ "Result #2: " <> Day01.run2 fixture
 
-  print "Day2"
-  fixture <- readFile "app/Inputs/Day2.txt"
-  print $ "Result #1: " <> Day2.run1 fixture
-  print $ "Result #2: " <> Day2.run2 fixture
+  print "Day02"
+  fixture <- readFile "app/Inputs/Day02.txt"
+  print $ "Result #1: " <> Day02.run1 fixture
+  print $ "Result #2: " <> Day02.run2 fixture
 
-  print "Day3"
-  fixture <- readFile "app/Inputs/Day3.txt"
-  print $ "Result #1: " <> Day3.run1 fixture
-  print $ "Result #2: " <> Day3.run2 fixture
+  print "Day03"
+  fixture <- readFile "app/Inputs/Day03.txt"
+  print $ "Result #1: " <> Day03.run1 fixture
+  print $ "Result #2: " <> Day03.run2 fixture
 
-  print "Day4"
-  fixture <- readFile "app/Inputs/Day4.txt"
-  print $ "Result #1: " <> Day4.run1 fixture
-  print $ "Result #2: " <> Day4.run2 fixture
+  print "Day04"
+  fixture <- readFile "app/Inputs/Day04.txt"
+  print $ "Result #1: " <> Day04.run1 fixture
+  print $ "Result #2: " <> Day04.run2 fixture
 
-  print "Day5"
-  fixture <- readFile "app/Inputs/Day5.txt"
-  print $ "Result #1: " <> Day5.run1 fixture
-  print $ "Result #2: " <> Day5.run2 fixture
+  print "Day05"
+  fixture <- readFile "app/Inputs/Day05.txt"
+  print $ "Result #1: " <> Day05.run1 fixture
+  print $ "Result #2: " <> Day05.run2 fixture
 
-  print "Day6"
-  fixture <- readFile "app/Inputs/Day6.txt"
-  print $ "Result #1: " <> Day6.run1 fixture
-  print $ "Result #2: " <> Day6.run2 fixture
+  print "Day06"
+  fixture <- readFile "app/Inputs/Day06.txt"
+  print $ "Result #1: " <> Day06.run1 fixture
+  print $ "Result #2: " <> Day06.run2 fixture
 
-  print "Day7"
-  fixture <- readFile "app/Inputs/Day7.txt"
-  print $ "Result #1: " <> Day7.run1 fixture
-  print $ "Result #2: " <> Day7.run2 fixture
+  print "Day07"
+  fixture <- readFile "app/Inputs/Day07.txt"
+  print $ "Result #1: " <> Day07.run1 fixture
+  print $ "Result #2: " <> Day07.run2 fixture
 
-  print "Day8"
-  fixture <- readFile "app/Inputs/Day8.txt"
-  print $ "Result #1: " <> Day8.run1 fixture
-  print $ "Result #2: " <> Day8.run2 fixture
+  print "Day08"
+  fixture <- readFile "app/Inputs/Day08.txt"
+  print $ "Result #1: " <> Day08.run1 fixture
+  print $ "Result #2: " <> Day08.run2 fixture
 
-  print "Day9"
-  fixture <- readFile "app/Inputs/Day9.txt"
-  print $ "Result #1: " <> Day9.run1 fixture
-  print $ "Result #2: " <> Day9.run2 fixture
+  print "Day09"
+  fixture <- readFile "app/Inputs/Day09.txt"
+  print $ "Result #1: " <> Day09.run1 fixture
+  print $ "Result #2: " <> Day09.run2 fixture

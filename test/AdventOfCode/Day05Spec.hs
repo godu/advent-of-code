@@ -1,9 +1,9 @@
-module AdventOfCode.Day5Spec
+module AdventOfCode.Day05Spec
   ( spec,
   )
 where
 
-import AdventOfCode.Day5
+import AdventOfCode.Day05
   ( process1,
     run1,
   )

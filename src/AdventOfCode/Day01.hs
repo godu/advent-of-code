@@ -1,4 +1,4 @@
-module AdventOfCode.Day1
+module AdventOfCode.Day01
   ( run1,
     process1,
     run2,

@@ -12,6 +12,12 @@
 $ stack install hlint ormolu
 ```
 
+## Build
+
+```shell
+$ stack build --test --haddock --no-haddock-hyperlink-source
+```
+
 ## Test
 
 ```shell

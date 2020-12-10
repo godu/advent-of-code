@@ -1,9 +1,9 @@
-module AdventOfCode.Day4Spec
+module AdventOfCode.Day04Spec
   ( spec,
   )
 where
 
-import AdventOfCode.Day4
+import AdventOfCode.Day04
   ( Passport (..),
     process1,
     process2,

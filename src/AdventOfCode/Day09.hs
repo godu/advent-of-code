@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module AdventOfCode.Day9
+module AdventOfCode.Day09
   ( run1,
     process1,
     run2,
