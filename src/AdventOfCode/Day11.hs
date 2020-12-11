@@ -96,8 +96,53 @@ readGrid =
 run1 :: String -> String
 run1 = show . process1 . readGrid
 
-process2 :: Int -> Int
-process2 = id
+visibleNeighbors :: Grid Cell -> (Int, Int) -> [Cell]
+visibleNeighbors grid (x, y) =
+  mapMaybe
+    (trace grid (x, y))
+    [ (-1, -1),
+      (-1, 0),
+      (-1, 1),
+      (0, -1),
+      (0, 1),
+      (1, -1),
+      (1, 0),
+      (1, 1)
+    ]
+  where
+    trace :: Grid Cell -> (Int, Int) -> (Int, Int) -> Maybe Cell
+    trace grid (x, y) (dx, dy) = case grid !? (x + dx, y + dy) of
+      Nothing -> Nothing
+      Just Floor -> trace grid (x + dx, y + dy) (dx, dy)
+      cell -> cell
+
+process2 :: Grid Cell -> Int
+process2 =
+  fold (\c -> if c == Occupied then (1 +) else id) 0
+    . last
+    . unfoldr go
+  where
+    go :: Grid Cell -> Maybe (Grid Cell, Grid Cell)
+    go grid =
+      if nextGrid == grid
+        then Nothing
+        else return (nextGrid, nextGrid)
+      where
+        nextGrid = nextGen grid
+
+    nextGen :: Grid Cell -> Grid Cell
+    nextGen grid = imap (computeCell grid) grid
+
+    computeCell :: Grid Cell -> (Int, Int) -> Cell -> Cell
+    computeCell grid i Empty =
+      if (== 0) $ length $ filter (== Occupied) $ visibleNeighbors grid i
+        then Occupied
+        else Empty
+    computeCell grid i Occupied =
+      if (>= 5) $ length $ filter (== Occupied) $ visibleNeighbors grid i
+        then Empty
+        else Occupied
+    computeCell _ _ x = x
 
 run2 :: String -> String
-run2 = id
+run2 = show . process2 . readGrid
