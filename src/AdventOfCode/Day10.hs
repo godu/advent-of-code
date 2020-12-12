@@ -33,7 +33,7 @@ run1 :: String -> String
 run1 = show . process1 . fmap read . lines
 
 arrangements :: [Int] -> Int
-arrangements (x: y: xs) | x + y <=3 = arrangements (y: xs)  + arrangements (x + y : xs)
+arrangements (x : y : xs) | x + y <= 3 = arrangements (y : xs) + arrangements (x + y : xs)
 arrangements (_ : xs) = arrangements xs
 arrangements _ = 1
 
