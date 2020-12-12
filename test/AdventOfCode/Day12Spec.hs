@@ -18,12 +18,18 @@ import Test.Hspec
 spec :: Spec
 spec = do
   it "run1" $ do
-    run1 "F10\n\
-    \N3\n\
-    \F7\n\
-    \R90\n\
-    \F11\n" `shouldBe` "25"
-  it "process2" $ do
-    process2 0 `shouldBe` 0
+    run1
+      "F10\n\
+      \N3\n\
+      \F7\n\
+      \R90\n\
+      \F11\n"
+      `shouldBe` "25"
   it "run2" $ do
-    run2 "" `shouldBe` ""
+    run2
+      "F10\n\
+      \N3\n\
+      \F7\n\
+      \R90\n\
+      \F11\n"
+      `shouldBe` "286"
