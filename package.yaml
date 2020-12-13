@@ -22,6 +22,7 @@ library:
     - containers
     - vector
     - split
+    - arithmoi
 
 executables:
   advent-of-code-exe:

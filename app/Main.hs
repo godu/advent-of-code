@@ -83,5 +83,4 @@ main = do
   print "Day13"
   fixture <- readFile "app/Inputs/Day13.txt"
   print $ "Result #1: " <> Day13.run1 fixture
-
--- print $ "Result #2: " <> Day13.run2 fixture
+  print $ "Result #2: " <> Day13.run2 fixture

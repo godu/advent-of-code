@@ -7,12 +7,14 @@ module AdventOfCode.Day13
 where
 
 import Data.List.Extra (minimumOn)
-import Data.Maybe (catMaybes)
+import Data.Maybe (catMaybes, fromMaybe)
+import Debug.Trace
+import Math.NumberTheory.Moduli (chineseRemainder)
 import Text.ParserCombinators.ReadP (eof, sepBy, skipSpaces, string, (+++))
 import Text.ParserCombinators.ReadPrec (lift, minPrec, readPrec_to_P)
 import Text.Read (Read (readPrec))
 
-data Note = Note Int [Maybe Int] deriving (Show)
+data Note = Note Integer [Maybe Integer] deriving (Show)
 
 instance Read Note where
   readPrec = do
@@ -29,20 +31,37 @@ instance Read Note where
     lift eof
     return $ Note timestamp lines
 
-process1 :: Note -> Int
+process1 :: Note -> Integer
 process1 (Note timestamp lines) =
-  (\(line, depart) -> line * (depart - timestamp)) $
-    minimumOn snd $
-      nextDepart timestamp <$> catMaybes lines
+  let (line, depart) = traceShowId $ findNextDepart timestamp lines
+   in line * (depart - timestamp)
+
+findNextDepart :: Integer -> [Maybe Integer] -> (Integer, Integer)
+findNextDepart timestamp lines =
+  minimumOn snd $
+    nextDepart timestamp <$> catMaybes lines
   where
-    nextDepart :: Int -> Int -> (Int, Int)
-    nextDepart timestamp line = (line, (* line) $ (+ 1) $ timestamp `div` line)
+    nextDepart :: Integer -> Integer -> (Integer, Integer)
+    nextDepart timestamp line =
+      ( line,
+        case timestamp `divMod` line of
+          (d, 0) -> d * line
+          (d, _) -> (d + 1) * line
+      )
 
 run1 :: String -> String
 run1 = show . process1 . read
 
-process2 :: Int -> Int
-process2 = id
+process2 :: Note -> Integer
+process2 (Note _ lines) =
+  fromMaybe 0 $
+    chineseRemainder $
+      catMaybes $
+        ( \(i, line) -> case line of
+            Nothing -> Nothing
+            Just l -> return (l - i, l)
+        )
+          <$> zip [0 ..] lines
 
 run2 :: String -> String
-run2 = const ""
+run2 = show . process2 . read
