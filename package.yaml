@@ -18,11 +18,11 @@ dependencies:
 library:
   source-dirs: src
   dependencies:
-    - extra
-    - containers
-    - vector
-    - split
     - arithmoi
+    - containers
+    - extra
+    - split
+    - vector
 
 executables:
   advent-of-code-exe:
