@@ -8,7 +8,6 @@ where
 
 import Data.List.Extra (minimumOn)
 import Data.Maybe (catMaybes, fromMaybe)
-import Debug.Trace
 import Math.NumberTheory.Moduli (chineseRemainder)
 import Text.ParserCombinators.ReadP (eof, sepBy, skipSpaces, string, (+++))
 import Text.ParserCombinators.ReadPrec (lift, minPrec, readPrec_to_P)
@@ -33,7 +32,7 @@ instance Read Note where
 
 process1 :: Note -> Integer
 process1 (Note timestamp lines) =
-  let (line, depart) = traceShowId $ findNextDepart timestamp lines
+  let (line, depart) = findNextDepart timestamp lines
    in line * (depart - timestamp)
 
 findNextDepart :: Integer -> [Maybe Integer] -> (Integer, Integer)

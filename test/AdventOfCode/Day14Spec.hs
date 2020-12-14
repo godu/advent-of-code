@@ -4,8 +4,7 @@ module AdventOfCode.Day14Spec
 where
 
 import AdventOfCode.Day14
-  ( process2,
-    run1,
+  ( run1,
     run2,
   )
 import Test.Hspec
@@ -23,7 +22,10 @@ spec = do
       \mem[7] = 101\n\
       \mem[8] = 0\n"
       `shouldBe` "165"
-  it "process2" $ do
-    process2 0 `shouldBe` 0
   it "run2" $ do
-    run2 "" `shouldBe` ""
+    run2
+      "mask = 000000000000000000000000000000X1001X\n\
+      \mem[42] = 100\n\
+      \mask = 00000000000000000000000000000000X0XX\n\
+      \mem[26] = 1\n"
+      `shouldBe` "208"

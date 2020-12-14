@@ -17,7 +17,7 @@ type Mask = [Maybe Bool]
 
 data Instruction
   = Mask Mask
-  | Memory Int Bits
+  | Memory Bits Bits
   deriving (Show)
 
 instance Read Instruction where
@@ -30,11 +30,11 @@ instance Read Instruction where
     )
       +++ ( do
               lift $ string "mem["
-              index <- readPrec
+              address <- intToBits <$> readPrec
               lift $ string "] = "
               bits <- intToBits <$> readPrec
               lift eof
-              return $ Memory index bits
+              return $ Memory address bits
           )
     where
       readPrecBool :: ReadPrec Bool
@@ -72,7 +72,7 @@ bitsToInt = bitsToInt' 0
         (acc * 2 + (if x then 1 else 0))
         xs
 
-data State = State Mask (Map Int Bits)
+data State = State Mask (Map Bits Bits)
 
 initialState :: State
 initialState = State (replicate 36 Nothing) empty
@@ -85,7 +85,7 @@ process1 =
   where
     go :: State -> Instruction -> State
     go (State _ memories) (Mask mask) = State mask memories
-    go (State mask memories) (Memory index value) = State mask $ insert index (applyMask mask value) memories
+    go (State mask memories) (Memory address value) = State mask $ insert address (applyMask mask value) memories
 
     applyMask :: Mask -> Bits -> Bits
     applyMask mask = fmap applyMask' . zip mask
@@ -96,8 +96,33 @@ process1 =
 run1 :: String -> String
 run1 = show . process1 . fmap (read :: String -> Instruction) . lines
 
-process2 :: Int -> Int
-process2 = id
+toAddresses :: Bits -> Mask -> [Bits]
+toAddresses bits = maskToAddresses . fmap applyMask . zip bits
+  where
+    applyMask :: (Bool, Maybe Bool) -> Maybe Bool
+    applyMask (x, Nothing) = Nothing
+    applyMask (x, Just False) = Just x
+    applyMask (_, Just True) = Just True
+
+maskToAddresses :: Mask -> [Bits]
+maskToAddresses (Nothing : xs) = ((False :) <$> maskToAddresses xs) <> ((True :) <$> maskToAddresses xs)
+maskToAddresses (Just x : xs) = (x :) <$> maskToAddresses xs
+maskToAddresses [] = [[]]
+
+process2 :: [Instruction] -> Int
+process2 =
+  foldl ((. bitsToInt) . (+)) 0
+    . (\(State _ memories) -> memories)
+    . foldl go initialState
+  where
+    go :: State -> Instruction -> State
+    go (State _ memories) (Mask mask) = State mask memories
+    go (State mask memories) (Memory address value) =
+      State mask $
+        foldl
+          (\memories address -> insert address value memories)
+          memories
+          $ toAddresses address mask
 
 run2 :: String -> String
-run2 = const ""
+run2 = show . process2 . fmap (read :: String -> Instruction) . lines

@@ -10,8 +10,7 @@ where
 
 import Data.List (unfoldr)
 import Data.Maybe (mapMaybe)
-import qualified Data.Vector as V (Vector, fromList, imap, toList, (!?))
-import Debug.Trace
+import qualified Data.Vector as V (Vector, fromList, imap, (!?))
 import Text.ParserCombinators.ReadP (string, (+++))
 import Text.Read (Read (readPrec), lift)
 
