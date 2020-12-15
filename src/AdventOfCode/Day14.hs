@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 module AdventOfCode.Day14
   ( run1,
     process1,
@@ -6,7 +8,9 @@ module AdventOfCode.Day14
   )
 where
 
-import Data.Map (Map, empty, insert)
+import Data.List (unfoldr)
+import Data.Map (empty, insert)
+import Data.Maybe (catMaybes)
 import Text.ParserCombinators.ReadP (eof, many, string)
 import Text.ParserCombinators.ReadPrec (ReadPrec, lift, minPrec, readPrec_to_P, (+++))
 import Text.Read (Read (readPrec))
@@ -17,7 +21,7 @@ type Mask = [Maybe Bool]
 
 data Instruction
   = Mask Mask
-  | Memory Bits Bits
+  | Memory Int Int
   deriving (Show)
 
 instance Read Instruction where
@@ -30,9 +34,9 @@ instance Read Instruction where
     )
       +++ ( do
               lift $ string "mem["
-              address <- intToBits <$> readPrec
+              address <- readPrec
               lift $ string "] = "
-              bits <- intToBits <$> readPrec
+              bits <- readPrec
               lift eof
               return $ Memory address bits
           )
@@ -72,57 +76,64 @@ bitsToInt = bitsToInt' 0
         (acc * 2 + (if x then 1 else 0))
         xs
 
-data State = State Mask (Map Bits Bits)
+data State = State Mask [Instruction]
 
-initialState :: State
-initialState = State (replicate 36 Nothing) empty
+applyMask :: Mask -> Int -> Int
+applyMask mask = bitsToInt . fmap applyMask' . zip mask . intToBits
+  where
+    applyMask' (Nothing, x) = x
+    applyMask' (Just x, _) = x
 
 process1 :: [Instruction] -> Int
 process1 =
-  foldl ((. bitsToInt) . (+)) 0
-    . (\(State _ memories) -> memories)
-    . foldl go initialState
+  sum
+    . foldl (\memories (address, value) -> insert address value memories) empty
+    . catMaybes
+    . unfoldr go
+    . State []
   where
-    go :: State -> Instruction -> State
-    go (State _ memories) (Mask mask) = State mask memories
-    go (State mask memories) (Memory address value) = State mask $ insert address (applyMask mask value) memories
-
-    applyMask :: Mask -> Bits -> Bits
-    applyMask mask = fmap applyMask' . zip mask
-      where
-        applyMask' (Nothing, x) = x
-        applyMask' (Just x, _) = x
+    go :: State -> Maybe (Maybe (Int, Int), State)
+    go (State _ []) = Nothing
+    go (State _ (Mask mask : instructions)) = return (Nothing, State mask instructions)
+    go (State mask (Memory address value : instructions)) =
+      return
+        ( Just (address, applyMask mask value),
+          State mask instructions
+        )
 
 run1 :: String -> String
 run1 = show . process1 . fmap (read :: String -> Instruction) . lines
 
-toAddresses :: Bits -> Mask -> [Bits]
-toAddresses bits = maskToAddresses . fmap applyMask . zip bits
+toAddresses :: Int -> Mask -> [Int]
+toAddresses address = fmap bitsToInt . maskToAddresses . fmap applyMask . zip (intToBits address)
   where
     applyMask :: (Bool, Maybe Bool) -> Maybe Bool
     applyMask (x, Nothing) = Nothing
     applyMask (x, Just False) = Just x
     applyMask (_, Just True) = Just True
 
-maskToAddresses :: Mask -> [Bits]
-maskToAddresses (Nothing : xs) = ((False :) <$> maskToAddresses xs) <> ((True :) <$> maskToAddresses xs)
-maskToAddresses (Just x : xs) = (x :) <$> maskToAddresses xs
-maskToAddresses [] = [[]]
+    maskToAddresses :: Mask -> [Bits]
+    maskToAddresses (Nothing : xs) = ((False :) <$> maskToAddresses xs) <> ((True :) <$> maskToAddresses xs)
+    maskToAddresses (Just x : xs) = (x :) <$> maskToAddresses xs
+    maskToAddresses [] = [[]]
 
 process2 :: [Instruction] -> Int
 process2 =
-  foldl ((. bitsToInt) . (+)) 0
-    . (\(State _ memories) -> memories)
-    . foldl go initialState
+  sum
+    . foldl (\memories (address, value) -> insert address value memories) empty
+    . concat
+    . unfoldr go
+    . State []
   where
-    go :: State -> Instruction -> State
-    go (State _ memories) (Mask mask) = State mask memories
-    go (State mask memories) (Memory address value) =
-      State mask $
-        foldl
-          (\memories address -> insert address value memories)
-          memories
-          $ toAddresses address mask
+    go :: State -> Maybe ([(Int, Int)], State)
+    go (State _ []) = Nothing
+    go (State _ (Mask mask : instructions)) = return ([], State mask instructions)
+    go (State mask (Memory address value : instructions)) =
+      return $
+        ( (,value)
+            <$> toAddresses address mask,
+          State mask instructions
+        )
 
 run2 :: String -> String
 run2 = show . process2 . fmap (read :: String -> Instruction) . lines
