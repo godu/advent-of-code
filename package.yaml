@@ -28,17 +28,13 @@ executables:
   advent-of-code-exe:
     main: Main.hs
     source-dirs: app
+    dependencies:
+      - advent-of-code
     ghc-options:
       - -O2
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N
-      - -fexcess-precision
-      - -optc-O3
-      - -optc-ffast-math
-      - -funfolding-use-threshold=16
-    dependencies:
-      - advent-of-code
 
 tests:
   advent-of-code-test:

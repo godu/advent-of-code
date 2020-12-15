@@ -23,6 +23,7 @@ spec = do
     run1 "2,3,1" `shouldBe` "78"
     run1 "3,2,1" `shouldBe` "438"
     run1 "3,1,2" `shouldBe` "1836"
+
   it "run2" $ do
     run2 "0,3,6" `shouldBe` "175594"
     run2 "1,3,2" `shouldBe` "2578"

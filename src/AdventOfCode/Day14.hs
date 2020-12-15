@@ -129,7 +129,7 @@ process2 =
     go (State _ []) = Nothing
     go (State _ (Mask mask : instructions)) = return ([], State mask instructions)
     go (State mask (Memory address value : instructions)) =
-      return $
+      return
         ( (,value)
             <$> toAddresses address mask,
           State mask instructions

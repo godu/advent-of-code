@@ -41,6 +41,6 @@ jobs:
       - name: Styling 💅
         run: ormolu --color always --check-idempotence --mode check **/*.hs
       - name: Test 🚧
-        run: stack --no-terminal --system-ghc test --fast
+        run: stack --no-terminal --system-ghc test
       - name: Run 🚀
         run: stack --no-terminal --system-ghc run
