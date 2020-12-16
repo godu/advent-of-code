@@ -7,8 +7,6 @@ import AdventOfCode.Day16
   ( Note (Note),
     Rule (Rule),
     Ticket (Ticket),
-    process1,
-    process2,
     run1,
     run2,
   )
@@ -64,7 +62,17 @@ spec = do
       \55,2,20\n\
       \38,6,12\n"
       `shouldBe` "71"
-  it "process2" $ do
-    process2 0 `shouldBe` 0
   it "run2" $ do
-    run2 "" `shouldBe` ""
+    run2
+      "class: 0-1 or 4-19\n\
+      \row: 0-5 or 8-19\n\
+      \seat: 0-13 or 16-19\n\
+      \\n\
+      \your ticket:\n\
+      \11,12,13\n\
+      \\n\
+      \nearby tickets:\n\
+      \3,9,18\n\
+      \15,1,5\n\
+      \5,14,9\n"
+      `shouldBe` "1"
