@@ -1,16 +1,15 @@
+{-# LANGUAGE FlexibleInstances #-}
+
 module AdventOfCode.Day17
   ( run1,
     run2,
     neighbors,
-    Coordinate (Coordinate),
   )
 where
 
 import Data.Ix (Ix (inRange))
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Set (Set, fromList, member, toList)
-import Data.Tuple.Extra (uncurry3)
-import Debug.Trace
 import Text.ParserCombinators.ReadP (string)
 import Text.Read (Read (readPrec), lift, (+++))
 
@@ -25,72 +24,66 @@ instance Read State where
     (Active <$ lift (string "#"))
       +++ (Inactive <$ lift (string "."))
 
-data Coordinate = Coordinate Int Int Int deriving (Show, Eq, Ord)
+class Point a where
+  range :: (a, a) -> [a]
+  neighbors :: a -> [a]
+  ounterBounds :: [a] -> (a, a)
 
-newtype Grid = Grid (Set Coordinate) deriving (Show, Eq)
+instance Point (Int, Int, Int) where
+  range ((x, y, z), (x', y', z')) =
+    (\[x, y, z] -> (x, y, z))
+      <$> sequence
+        [ [x .. x'],
+          [y .. y'],
+          [z .. z']
+        ]
 
-range :: (Coordinate, Coordinate) -> [Coordinate]
-range (Coordinate x y z, Coordinate x' y' z') =
-  (\[x, y, z] -> Coordinate x y z)
-    <$> sequence
-      [ [x .. x'],
-        [y .. y'],
-        [z .. z']
-      ]
+  neighbors (x, y, z) =
+    filter (/= (x, y, z)) $
+      range
+        ((x - 1, y -1, z -1), (x + 1, y + 1, z + 1))
 
-neighbors :: Coordinate -> [Coordinate]
-neighbors (Coordinate x y z) =
-  filter
-    (/= Coordinate x y z)
-    $ range
-      ( Coordinate (pred x) (pred y) (pred z),
-        Coordinate (succ x) (succ y) (succ z)
-      )
+  ounterBounds xs =
+    ( add (-1) $ foldl (append min) (0, 0, 0) xs,
+      add 1 $ foldl (append max) (0, 0, 0) xs
+    )
+    where
+      append f (x, y, z) (x', y', z') = (f x x', f y y', f z z')
+      add n (x, y, z) = (x + n, y + n, z + n)
 
-bounds :: [Coordinate] -> (Coordinate, Coordinate)
-bounds xs =
-  ( foldl (append min) (Coordinate 0 0 0) xs,
-    foldl (append max) (Coordinate 0 0 0) xs
-  )
-  where
-    append f (Coordinate x y z) (Coordinate x' y' z') = Coordinate (f x x') (f y y') (f z z')
+newtype Grid a = Grid (Set a) deriving (Show, Eq)
 
 singleton :: a -> [a]
 singleton x = [x]
 
-generation :: Grid -> Grid
-generation (Grid grid) =
+generation :: (Point a, Ord a) => (State -> Int -> Bool) -> Grid a -> Grid a
+generation willBeActive' (Grid grid) =
   Grid $
     fromList $
-      filter willBeAlive $
+      filter willBeActive $
         range $
-          ( \(Coordinate x y z, Coordinate x' y' z') ->
-              ( Coordinate (pred x) (pred y) (pred z),
-                Coordinate (succ x') (succ y') (succ z')
-              )
-          )
-            $ bounds $
-              toList grid
+          ounterBounds $
+            toList grid
   where
-    willBeAlive :: Coordinate -> Bool
-    willBeAlive coord =
-      if coord `member` grid
-        then inRange (2, 3) $ length activeNeighbors
-        else length activeNeighbors == 3
-      where
-        activeNeighbors = filter (`member` grid) $ neighbors coord
+    willBeActive coord =
+      willBeActive'
+        (if coord `member` grid then Active else Inactive)
+        $ length $ filter (`member` grid) $ neighbors coord
 
-process1 :: Grid -> Int
+process1 :: Grid (Int, Int, Int) -> Int
 process1 =
   length
     . toList
     . (\(Grid grid) -> grid)
-    . generation
-    . generation
-    . generation
-    . generation
-    . generation
-    . generation
+    . generation willBeActive
+    . generation willBeActive
+    . generation willBeActive
+    . generation willBeActive
+    . generation willBeActive
+    . generation willBeActive
+  where
+    willBeActive Active activeNeighbors = inRange (2, 3) activeNeighbors
+    willBeActive Inactive activeNeighbors = activeNeighbors == 3
 
 run1 :: String -> String
 run1 =
@@ -100,7 +93,7 @@ run1 =
     . fromList
     . fmap fst
     . filter ((== Active) . snd)
-    . fmap (\(x, y, s) -> (Coordinate x y 0, s))
+    . fmap (\(x, y, s) -> ((x, y, 0), s))
     . concatMap (\(x, xs) -> (\(y, s) -> (x, y, s)) <$> xs)
     . zip [0 ..]
     . fmap
@@ -111,5 +104,59 @@ run1 =
       )
     . lines
 
+instance Point (Int, Int, Int, Int) where
+  range ((x, y, z, w), (x', y', z', w')) =
+    (\[x, y, z, w] -> (x, y, z, w))
+      <$> sequence
+        [ [x .. x'],
+          [y .. y'],
+          [z .. z'],
+          [w .. w']
+        ]
+
+  neighbors (x, y, z, w) =
+    filter (/= (x, y, z, w)) $
+      range
+        ((x - 1, y -1, z -1, w -1), (x + 1, y + 1, z + 1, w + 1))
+
+  ounterBounds xs =
+    ( add (-1) $ foldl (append min) (0, 0, 0, 0) xs,
+      add 1 $ foldl (append max) (0, 0, 0, 0) xs
+    )
+    where
+      append f (x, y, z, w) (x', y', z', w') = (f x x', f y y', f z z', f w w')
+      add n (x, y, z, w) = (x + n, y + n, z + n, w + n)
+
+process2 :: Grid (Int, Int, Int, Int) -> Int
+process2 =
+  length
+    . toList
+    . (\(Grid grid) -> grid)
+    . generation willBeActive
+    . generation willBeActive
+    . generation willBeActive
+    . generation willBeActive
+    . generation willBeActive
+    . generation willBeActive
+  where
+    willBeActive Active activeNeighbors = inRange (2, 3) activeNeighbors
+    willBeActive Inactive activeNeighbors = activeNeighbors == 3
+
 run2 :: String -> String
-run2 = const ""
+run2 =
+  show
+    . process2
+    . Grid
+    . fromList
+    . fmap fst
+    . filter ((== Active) . snd)
+    . fmap (\(x, y, s) -> ((x, y, 0, 0), s))
+    . concatMap (\(x, xs) -> (\(y, s) -> (x, y, s)) <$> xs)
+    . zip [0 ..]
+    . fmap
+      ( zip [0 ..]
+          . fmap
+            ( (read :: String -> State) . singleton
+            )
+      )
+    . lines
