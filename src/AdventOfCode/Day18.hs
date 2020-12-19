@@ -8,10 +8,8 @@ where
 
 import AdventOfCode.Utils (read')
 import Data.Char (isDigit)
-import Debug.Trace
-import Text.ParserCombinators.ReadP (ReadP, chainl, chainl1, eof, get, munch1, skipSpaces, (+++), (<++))
-import Text.ParserCombinators.ReadPrec (lift, pfail)
-import Text.Read (Read (readPrec), ReadPrec)
+import Text.ParserCombinators.ReadP (ReadP, chainl1, eof, get, munch1, skipSpaces, (+++), (<++))
+import Text.ParserCombinators.ReadPrec (ReadPrec, lift)
 
 data Expression
   = Value Int
@@ -44,7 +42,7 @@ paren a = do
   return a'
 
 leftRight :: ReadPrec Expression
-leftRight = lift exp <* lift eof
+leftRight = lift $ exp <* eof
   where
     exp :: ReadP Expression
     exp = chainl1 (value <++ paren exp) (add +++ mul)
@@ -54,14 +52,22 @@ reduce (Value a) = a
 reduce (Addition a b) = reduce a + reduce b
 reduce (Multiplication a b) = reduce a * reduce b
 
-process1 :: Int -> Int
-process1 = id
+process1 :: [Expression] -> Int
+process1 = sum . fmap reduce
 
 run1 :: String -> String
-run1 = show . sum . fmap (reduce . read' leftRight) . lines
+run1 = show . process1 . fmap (read' leftRight) . lines
 
-process2 :: Int -> Int
-process2 = id
+prioritized :: ReadPrec Expression
+prioritized = lift $ exp' <* eof
+  where
+    exp :: ReadP Expression
+    exp = chainl1 (value <++ paren exp') add
+    exp' :: ReadP Expression
+    exp' = chainl1 (exp <++ paren exp') mul
+
+process2 :: [Expression] -> Int
+process2 = process1
 
 run2 :: String -> String
-run2 = const ""
+run2 = show . process2 . fmap (read' prioritized) . lines
