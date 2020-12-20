@@ -76,24 +76,35 @@ readPrecInput = do
   lift $ eof
   return (rules, inputs)
 
-process1 :: IntMap Rule -> String -> Maybe String
-process1 m a = do
-  Rule rule <- m !? 0
-  readMaybe' (rule m) a
+process1 :: (IntMap Rule, [String]) -> Int
+process1 (rules, inputs) =
+  length $
+    mapMaybe
+      ( \input -> do
+          Rule rule <- rules !? 0
+          readMaybe' (rule rules) input
+      )
+      inputs
 
 run1 :: String -> String
-run1 a =
-  show $
-    length $
-      ( \(rules, inputs) ->
-          mapMaybe
-            (process1 rules)
-            inputs
-      )
-        $ read' readPrecInput a
+run1 a = show $ process1 $ read' readPrecInput a
 
-process2 :: Int -> Int
-process2 = id
+process2 :: (IntMap Rule, [String]) -> Int
+process2 (rules, inputs) =
+  length $
+    mapMaybe
+      ( \input -> do
+          Rule rule <- extraRules !? 0
+          readMaybe' (rule extraRules) input
+      )
+      inputs
+  where
+    extraRules =
+      read'
+        readPrecRules
+        "8: 42 | 42 8\n\
+        \11: 42 31 | 42 11 31"
+        <> rules
 
 run2 :: String -> String
-run2 = const ""
+run2 a = show $ process2 $ read' readPrecInput a
