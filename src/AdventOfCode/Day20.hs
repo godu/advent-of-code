@@ -7,7 +7,11 @@ module AdventOfCode.Day20
     findPlace,
     turn,
     vFlip,
+    puzzleToList,
+    markMonster,
     hFlip,
+    combineTiles,
+    resolve,
     Puzzle (Puzzle),
     Tile (Tile),
   )
@@ -17,7 +21,7 @@ import AdventOfCode.Utils (read')
 import Data.Char (isLetter)
 import Data.List (delete, find, partition, unfoldr)
 import Data.Map as M (Map, empty, fromList, insert, keys, (!?))
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, listToMaybe, mapMaybe)
 import Data.Set as S (Set, difference, fromList, toList, unions)
 import Text.ParserCombinators.ReadP (char, eof, munch1, sepBy, skipSpaces, string)
 import Text.Read (ReadPrec, lift, minPrec, readListPrec, readPrec, readPrec_to_P)
@@ -62,12 +66,12 @@ turn (Tile id pic) =
     foldl1 (zipWith (flip (<>))) $
       fmap (fmap singleton) pic
 
-vFlip :: Tile -> Tile
-vFlip (Tile id pic) =
-  Tile id $ reverse pic
-
 hFlip :: Tile -> Tile
 hFlip (Tile id pic) =
+  Tile id $ reverse pic
+
+vFlip :: Tile -> Tile
+vFlip (Tile id pic) =
   Tile id $ reverse <$> pic
 
 arrangements :: Tile -> [Tile]
@@ -82,7 +86,31 @@ arrangements t =
     turn $ turn $ turn $ vFlip t
   ]
 
-newtype Puzzle = Puzzle (Map (Int, Int) Tile) deriving (Show)
+puzzleToList :: Puzzle -> [[Tile]]
+puzzleToList (Puzzle puzzle) =
+  ( \y ->
+      mapMaybe
+        (\x -> puzzle !? (x, y))
+        [minX .. maxX]
+  )
+    <$> [minY .. maxY]
+  where
+    ((minX, minY), (maxX, maxY)) = bounds $ Puzzle puzzle
+
+combineTiles :: [[Tile]] -> Tile
+combineTiles =
+  Tile 0
+    . foldr (<>) []
+    . fmap
+      ( foldr
+          (zipWith (flip (<>)))
+          (repeat [])
+          . fmap
+            ( fmap (init . tail) . init . tail . (\(Tile _ pic) -> pic)
+            )
+      )
+
+newtype Puzzle = Puzzle (Map (Int, Int) Tile) deriving (Show, Eq)
 
 bounds :: Puzzle -> ((Int, Int), (Int, Int))
 bounds (Puzzle puzzle) =
@@ -133,20 +161,9 @@ matchWith (mtop, mleft, mbottom, mrigth) tile =
     && maybe True (== bottomHash tile) mbottom
     && maybe True (== rightHash tile) mrigth
 
-process1 :: [Tile] -> Int
-process1 (x : xs) = answers $ head $ go (Puzzle (M.fromList [((0, 0), x)])) xs
+resolve :: [Tile] -> Maybe Puzzle
+resolve (x : xs) = listToMaybe $ go (Puzzle (M.fromList [((0, 0), x)])) xs
   where
-    answers (Puzzle puzzle) =
-      product $
-        maybe 0 id_ . (puzzle !?)
-          <$> [ (minX, minY),
-                (minX, maxY),
-                (maxX, minY),
-                (maxX, maxY)
-              ]
-      where
-        ((minX, minY), (maxX, maxY)) = bounds $ Puzzle puzzle
-        id_ (Tile i _) = i
     go :: Puzzle -> [Tile] -> [Puzzle]
     go puzzle [] = [puzzle | isComplete puzzle]
     go puzzle tiles = fromMaybe [] $ do
@@ -170,11 +187,75 @@ process1 (x : xs) = answers $ head $ go (Puzzle (M.fromList [((0, 0), x)])) xs
           )
           candidates
 
+process1 :: [Tile] -> Int
+process1 = maybe 0 answers . resolve
+  where
+    answers (Puzzle puzzle) =
+      product $
+        maybe 0 id_ . (puzzle !?)
+          <$> [ (minX, minY),
+                (minX, maxY),
+                (maxX, minY),
+                (maxX, maxY)
+              ]
+      where
+        ((minX, minY), (maxX, maxY)) = bounds $ Puzzle puzzle
+        id_ (Tile i _) = i
+
 run1 :: String -> String
 run1 = show . process1 . read
 
-process2 :: Int -> Int
-process2 = id
+markMonster :: [[Char]] -> [[Char]]
+markMonster = eachCells markMonster'
+  where
+    eachCells :: ([[a]] -> [[a]]) -> [[a]] -> [[a]]
+    eachCells = eachRows . eachColumns
+    eachColumns :: ([[a]] -> [[a]]) -> [[a]] -> [[a]]
+    eachColumns f arr =
+      foldl
+        ( \arr i ->
+            let heads = take i <$> arr
+                tails = drop i <$> arr
+             in zipWith (<>) heads $ f tails
+        )
+        arr
+        [0 .. l]
+      where
+        l = maximum $ length <$> arr
+    eachRows :: ([[a]] -> [[a]]) -> [[a]] -> [[a]]
+    eachRows f arr =
+      foldl
+        ( \arr i ->
+            let (head, tail) = splitAt i arr
+             in head <> f tail
+        )
+        arr
+        [0 .. (length arr - 1)]
+    markMonster' :: [[Char]] -> [[Char]]
+    markMonster'
+      ( (a00 : a01 : a02 : a03 : a04 : a05 : a06 : a07 : a08 : a09 : a10 : a11 : a12 : a13 : a14 : a15 : a16 : a17 : '#' : a19 : as)
+          : ('#' : b01 : b02 : b03 : b04 : '#' : '#' : b07 : b08 : b09 : b10 : '#' : '#' : b13 : b14 : b15 : b16 : '#' : '#' : '#' : bs)
+          : (c00 : '#' : c02 : c03 : '#' : c05 : c06 : '#' : c08 : c09 : '#' : c11 : c12 : '#' : c14 : c15 : '#' : c17 : c18 : c19 : cs)
+          : xs
+        ) =
+        (a00 : a01 : a02 : a03 : a04 : a05 : a06 : a07 : a08 : a09 : a10 : a11 : a12 : a13 : a14 : a15 : a16 : a17 : 'O' : a19 : as) :
+        ('O' : b01 : b02 : b03 : b04 : 'O' : 'O' : b07 : b08 : b09 : b10 : 'O' : 'O' : b13 : b14 : b15 : b16 : 'O' : 'O' : 'O' : bs) :
+        (c00 : 'O' : c02 : c03 : 'O' : c05 : c06 : 'O' : c08 : c09 : 'O' : c11 : c12 : 'O' : c14 : c15 : 'O' : c17 : c18 : c19 : cs) :
+        xs
+    markMonster' xs = xs
+
+process2 :: [Tile] -> Int
+process2 tiles = fromMaybe 0 $ do
+  (Puzzle puzzle) <- resolve tiles
+  let bigPic = combineTiles $ puzzleToList $ Puzzle puzzle
+  return $
+    minimum $
+      length
+        . filter (== '#')
+        . concat
+        . markMonster
+        . (\(Tile _ pic) -> pic)
+        <$> arrangements bigPic
 
 run2 :: String -> String
-run2 = const ""
+run2 = show . process2 . read
