@@ -7,22 +7,22 @@ import Text.Read (ReadPrec, lift)
 
 readMaybe' :: ReadPrec a -> String -> Maybe a
 readMaybe' readPrec s =
-  case [x | (x, "") <- readPrec_to_S read' minPrec s] of
-    [x] -> Just x
-    _ -> Nothing
-  where
-    read' =
-      do
-        x <- readPrec
-        lift skipSpaces
-        return x
+  case readEither' readPrec s of
+    Right x -> return x
+    Left _ -> Nothing
 
 read' :: ReadPrec a -> String -> a
 read' readPrec s =
+  case readEither' readPrec s of
+    Right x -> x
+    Left x -> errorWithoutStackTrace x
+
+readEither' :: ReadPrec a -> String -> Either String a
+readEither' readPrec s =
   case [x | (x, "") <- readPrec_to_S read' minPrec s] of
-    [x] -> x
-    [] -> errorWithoutStackTrace "Prelude.read: no parse"
-    _ -> errorWithoutStackTrace "Prelude.read: ambiguous parse"
+    [x] -> Right x
+    [] -> Left "Prelude.read: no parse"
+    _ -> Left "Prelude.read: ambiguous parse"
   where
     read' =
       do

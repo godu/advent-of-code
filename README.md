@@ -1,6 +1,6 @@
 # advent-of-code-2020
 
-![Continuous Integration 👮‍♂️](https://github.com/godu/advent-of-code-2020/workflows/Continuous%20Integration%20%F0%9F%91%AE%E2%80%8D%E2%99%82%EF%B8%8F/badge.svg)
+[![Continuous Integration 👮‍♂️](https://github.com/godu/advent-of-code-2020/workflows/Continuous%20Integration%20%F0%9F%91%AE%E2%80%8D%E2%99%82%EF%B8%8F/badge.svg)](https://github.com/godu/advent-of-code-2020/actions?query=workflow%3A%22Continuous+Integration+%F0%9F%91%AE%E2%80%8D%E2%99%82%EF%B8%8F%22)
 
 [Advent of code](https://adventofcode.com/2020)
 

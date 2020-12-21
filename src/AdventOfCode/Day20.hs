@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 module AdventOfCode.Day20
   ( run1,
     process1,
@@ -166,26 +168,25 @@ resolve (x : xs) = listToMaybe $ go (Puzzle (M.fromList [((0, 0), x)])) xs
   where
     go :: Puzzle -> [Tile] -> [Puzzle]
     go puzzle [] = [puzzle | isComplete puzzle]
-    go puzzle tiles = fromMaybe [] $ do
-      place <- findPlace puzzle tiles
-      let (candidates, restTiles) =
-            partition
-              (any (matchWith (compatibleHashes puzzle place)) . arrangements)
-              tiles
-
-      return $
-        concatMap
-          ( \tile ->
-              let Just rightArrangement =
-                    find
-                      (matchWith (compatibleHashes puzzle place))
-                      $ arrangements tile
-                  Puzzle puzzle' = puzzle
-               in go
-                    (Puzzle $ M.insert place rightArrangement puzzle')
-                    (tile `delete` candidates <> restTiles)
-          )
-          candidates
+    go (Puzzle puzzle) tiles =
+      concatMap
+        ( \(place, tile) ->
+            go
+              (Puzzle $ M.insert place tile puzzle)
+              (tile `delete` tiles)
+        )
+        candidates
+      where
+        allArrangements = concatMap arrangements tiles
+        candidates =
+          filter
+            (matchWith'' $ Puzzle puzzle)
+            $ concatMap
+              (\p -> (p,) <$> allArrangements)
+              $ S.toList $
+                edges $
+                  Puzzle puzzle
+        matchWith'' puzzle (place, tile) = matchWith (compatibleHashes puzzle place) tile
 
 process1 :: [Tile] -> Int
 process1 = maybe 0 answers . resolve
