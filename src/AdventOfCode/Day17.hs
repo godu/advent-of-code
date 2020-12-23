@@ -7,6 +7,7 @@ module AdventOfCode.Day17
   )
 where
 
+import AdventOfCode.Utils (singleton)
 import Data.Ix (Ix (inRange))
 import Data.Maybe (fromMaybe, mapMaybe)
 import Data.Set (Set, fromList, member, toList)
@@ -52,9 +53,6 @@ instance Point (Int, Int, Int) where
       add n (x, y, z) = (x + n, y + n, z + n)
 
 newtype Grid a = Grid (Set a) deriving (Show, Eq)
-
-singleton :: a -> [a]
-singleton x = [x]
 
 generation :: (Point a, Ord a) => (State -> Int -> Bool) -> Grid a -> Grid a
 generation willBeActive' (Grid grid) =

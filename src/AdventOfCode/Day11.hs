@@ -8,6 +8,7 @@ module AdventOfCode.Day11
   )
 where
 
+import AdventOfCode.Utils (singleton)
 import Data.List (unfoldr)
 import Data.Maybe (mapMaybe)
 import qualified Data.Vector as V (Vector, fromList, imap, (!?))
@@ -37,9 +38,6 @@ imap f = V.imap (\x -> V.imap (\y -> f (x, y)))
 
 fold :: (a -> b -> b) -> b -> Grid a -> b
 fold f = foldr (flip (foldr f))
-
-singleton :: a -> [a]
-singleton a = [a]
 
 neighbors :: Grid a -> (Int, Int) -> [a]
 neighbors grid (x, y) =

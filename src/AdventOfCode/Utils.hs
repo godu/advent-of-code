@@ -1,4 +1,4 @@
-module AdventOfCode.Utils (read', readMaybe') where
+module AdventOfCode.Utils (read', readMaybe', singleton) where
 
 import Debug.Trace
 import Text.ParserCombinators.ReadP (skipSpaces)
@@ -29,3 +29,6 @@ readEither' readPrec s =
         x <- readPrec
         lift skipSpaces
         return x
+
+singleton :: a -> [a]
+singleton x = [x]

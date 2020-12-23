@@ -19,7 +19,7 @@ module AdventOfCode.Day20
   )
 where
 
-import AdventOfCode.Utils (read')
+import AdventOfCode.Utils (read', singleton)
 import Data.Char (isLetter)
 import Data.List (delete, find, partition, unfoldr)
 import Data.Map as M (Map, empty, fromList, insert, keys, (!?))
@@ -58,9 +58,6 @@ instance Read Tile where
     lift skipSpaces
     lift eof
     return $ tiles
-
-singleton :: a -> [a]
-singleton a = [a]
 
 turn :: Tile -> Tile
 turn (Tile id pic) =
