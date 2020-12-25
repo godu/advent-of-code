@@ -44,3 +44,4 @@ tests:
       - advent-of-code
       - hspec
       - containers
+      - vector

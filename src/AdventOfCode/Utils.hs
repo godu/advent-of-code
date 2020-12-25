@@ -1,6 +1,5 @@
 module AdventOfCode.Utils (read', readMaybe', singleton) where
 
-import Debug.Trace
 import Text.ParserCombinators.ReadP (skipSpaces)
 import Text.ParserCombinators.ReadPrec (minPrec, readPrec_to_S)
 import Text.Read (ReadPrec, lift)
