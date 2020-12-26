@@ -20,10 +20,10 @@ library:
   dependencies:
     - arithmoi
     - containers
-    - extra
     - split
     - vector
-
+    - extra
+    - monad-loops
 executables:
   advent-of-code-exe:
     main: Main.hs

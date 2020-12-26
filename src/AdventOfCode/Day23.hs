@@ -1,90 +1,61 @@
 module AdventOfCode.Day23
   ( run1,
-    process1,
     run2,
+    process1,
     process2,
-    go,
   )
 where
 
 import AdventOfCode.Utils (singleton)
+import Control.Monad (foldM_, zipWithM_)
+import Control.Monad.Loops (unfoldrM)
+import Control.Monad.ST (runST)
 import Data.Ix (Ix (inRange))
 import Data.List (intercalate, partition, unfoldr)
 import Data.List.Extra (trim)
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust, fromMaybe)
 import Data.Tuple (swap)
-import qualified Data.Vector as V (Vector, break, concat, drop, dropWhile, findIndex, fromList, generate, head, length, singleton, slice, tail, take, toList, (!), (++), (//))
+import qualified Data.Vector.Mutable as V
+import Debug.Trace
 
-go :: Int -> Int -> V.Vector Int -> V.Vector Int
-go 0 _ cups = cups
-go move i cups =
-  go (move - 1) ((i + 1) `mod` length cups) $
-    ( V.//
-        ( zip
-            ((`mod` length cups) <$> [destinationCupIndex - 2 ..])
-            (V.toList treeCups)
-            <> ( shift 3 (i + 1) (destinationCupIndex - 3) $
-                   cups
-               )
+go v current = do
+  x1 <- V.read v current
+  x2 <- V.read v x1
+  x3 <- V.read v x2
+  next <- V.read v x3
+
+  let l = V.length v
+      x =
+        head $
+          filter (`notElem` [x1, x2, x3]) $
+            unfoldr (\b -> return $ if b > 0 then (b - 1, b - 1) else (l - 1, l - 1)) current
+
+  V.write v current next
+
+  V.read v x >>= V.write v x3
+  V.write v x x1
+
+  return next
+
+process1 n xs =
+  fmap (+ 1) $
+    runST $ do
+      v <- V.new $ length xs'
+      zipWithM_ (V.write v) xs' (tail xs' ++ xs')
+
+      foldM_ (const . go v) (head xs') [1 .. n]
+
+      unfoldrM
+        ( \b -> do
+            a <- V.read v b
+            return $
+              if a == 0
+                then Nothing
+                else Just (a, a)
         )
-    )
-      $ cups
+        0
   where
-    currentCup = cups V.! i
-    treeCups = take (i + 1) 3 cups
-
-    destinationCup = minusOne (V.toList treeCups) (V.length cups) currentCup
-    destinationCupIndex =
-      fromJust $
-        V.findIndex (== destinationCup) cups
-
-    take :: Show a => Int -> Int -> V.Vector a -> V.Vector a
-    take i n v = xs V.++ ys
-      where
-        l = V.length v
-        n' = min (l - i) n
-        xs = V.slice i n' v
-        ys = V.slice 0 (n - n') v
-
-    minusOne :: [Int] -> Int -> Int -> Int
-    minusOne treeCups max currentCup =
-      head $
-        filter (`notElem` treeCups) $
-          unfoldr
-            ( \b ->
-                return $
-                  if b <= 1
-                    then (max, max)
-                    else (b -1, b -1)
-            )
-            currentCup
-
-    shift :: Show a => Int -> Int -> Int -> V.Vector a -> [(Int, a)]
-    shift move startIndex endIndex arr =
-      zip
-        ((`mod` l) <$> r)
-        $ (arr V.!)
-          . (`mod` l)
-          . (+ move)
-          <$> r
-      where
-        l = length arr
-        r =
-          if startIndex <= endIndex
-            then [startIndex .. endIndex]
-            else (`mod` l) <$> [startIndex .. endIndex + l]
-
-process1 :: Int -> [Int] -> [Int]
-process1 move xs =
-  V.toList $
-    answer $
-      go move 0 $ V.fromList xs
-  where
-    answer =
-      V.tail
-        . uncurry (<>)
-        . swap
-        . V.break (== 1)
+    xs' = (+ (-1)) <$> xs
 
 run1 :: String -> String
 run1 =
@@ -94,14 +65,23 @@ run1 =
     . fmap (read . singleton)
     . trim
 
-process2 :: Int -> [Int] -> Int
-process2 move xs =
-  product $
-    V.take 3 $
-      V.dropWhile (/= 1) $
-        go move 0 input
+process2 n xs =
+  runST $ do
+    v <- V.new $ length xs'
+    zipWithM_ (V.write v) xs' (tail xs' ++ xs')
+
+    foldM_ (const . go v) (head xs') [1 .. n]
+
+    x1 <- V.read v 0
+    x2 <- V.read v x1
+
+    return $ (x1 + 1) * (x2 + 1)
   where
-    input = V.generate 1000000 (+ 1) V.// zip [0 ..] xs
+    xs' = ((+ (-1)) <$> xs) ++ [length xs .. (1000000 - 1)]
 
 run2 :: String -> String
-run2 = const ""
+run2 =
+  show
+    . process2 10000000
+    . fmap (read . singleton)
+    . trim
