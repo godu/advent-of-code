@@ -25,7 +25,7 @@ jobs:
       - name: Install Stack 📡
         uses: haskell/actions/setup@v1
         with:
-          ghc-version: 8.8.4
+          ghc-version: 8.10.7
           enable-stack: true
           stack-version: "latest"
       - name: Update PATH with stack's bins
@@ -42,5 +42,36 @@ jobs:
         run: ormolu --color always --check-idempotence --mode check **/*.hs
       - name: Test 🚧
         run: stack --no-terminal --system-ghc test
+  run:
+    needs: ci
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        year: [2021, 2020]
+    steps:
+      - name: Checkout source 📡
+        uses: actions/checkout@v2
+      - name: Cache Stack 📦
+        uses: actions/cache@v2
+        with:
+          path: ~/.stack
+          key: ${{ runner.os }}-stack-global-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-stack-global-
+      - name: Cache Build 📦
+        uses: actions/cache@v2
+        with:
+          path: .stack-work
+          key: ${{ runner.os }}-stack-work-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}-${{ '**/*.hs' }}
+          restore-keys: |
+            ${{ runner.os }}-stack-work-
+      - name: Install Stack 📡
+        uses: haskell/actions/setup@v1
+        with:
+          ghc-version: 8.10.7
+          enable-stack: true
+          stack-version: "latest"
+      - name: Update PATH with stack's bins
+        run: echo "${HOME}/.local/bin" >> $GITHUB_PATH
       - name: Run 🚀
-        run: stack --no-terminal --system-ghc run
+        run: stack --no-terminal --system-ghc run advent-of-code-${{ matrix.year }}-exe

@@ -25,8 +25,8 @@ library:
     - extra
     - monad-loops
 executables:
-  advent-of-code-exe:
-    main: Main.hs
+  advent-of-code-2020-exe:
+    main: Year2020.hs
     source-dirs: app
     dependencies:
       - advent-of-code
@@ -35,6 +35,18 @@ executables:
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N
+      - -main-is Year2020
+  advent-of-code-2021-exe:
+    main: Year2021.hs
+    source-dirs: app
+    dependencies:
+      - advent-of-code
+    ghc-options:
+      - -O2
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -main-is Year2021
 
 tests:
   advent-of-code-test:
