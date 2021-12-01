@@ -48,7 +48,32 @@ spec = do
       )
       `shouldBe` "7"
   it "process2" $ do
-    process2 0
-      `shouldBe` 0
+    process2
+      [ 199,
+        200,
+        208,
+        210,
+        200,
+        207,
+        240,
+        269,
+        260,
+        263
+      ]
+      `shouldBe` 5
   it "run2" $ do
-    run2 "" `shouldBe` ""
+    run2
+      ( unlines
+          [ "199",
+            "200",
+            "208",
+            "210",
+            "200",
+            "207",
+            "240",
+            "269",
+            "260",
+            "263"
+          ]
+      )
+      `shouldBe` "5"
