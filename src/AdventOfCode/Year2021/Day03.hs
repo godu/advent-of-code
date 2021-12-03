@@ -6,13 +6,12 @@ module AdventOfCode.Year2021.Day03
   )
 where
 
-import AdventOfCode.Utils (read')
 import Data.Bifunctor (bimap)
-import Data.List (group, partition, transpose)
+import Data.Function (on)
+import Data.List (group, groupBy, partition, sort, sortBy, transpose, unfoldr)
+import Data.List.Extra (maximumOn, minimumOn)
 import Debug.Trace (traceShowId)
-import Text.ParserCombinators.ReadP (skipSpaces, string)
-import Text.ParserCombinators.ReadPrec ((+++))
-import Text.Read (ReadPrec, lift, readPrec)
+import GHC.Exts (groupWith)
 
 binaryToInt :: String -> Int
 binaryToInt = foldl go 0
@@ -20,7 +19,7 @@ binaryToInt = foldl go 0
     go n '1' = n * 2 + 1
     go n _ = n * 2
 
-process1 :: [[Char]] -> Int
+process1 :: [String] -> Int
 process1 =
   uncurry (*)
     . bimap binaryToInt binaryToInt
@@ -36,8 +35,28 @@ process1 =
 run1 :: String -> String
 run1 = show . process1 . lines
 
-process2 :: Int -> Int
-process2 = id
+process2 :: [String] -> Int
+process2 =
+  uncurry (*)
+    . bimap
+      (binaryToInt . unfoldr leastCommon)
+      (binaryToInt . unfoldr mostCommon)
+    . (\x -> (x, x))
+  where
+    mostCommon :: [String] -> Maybe (Char, [String])
+    mostCommon =
+      extract
+        . maximumOn length
+        . sortBy (flip compare `on` head)
+        . groupWith head
+    leastCommon :: [String] -> Maybe (Char, [String])
+    leastCommon =
+      extract
+        . minimumOn length
+        . groupWith head
+    extract :: [String] -> Maybe (Char, [String])
+    extract xs@((x : _) : _) = return (x, tail <$> xs)
+    extract _ = Nothing
 
 run2 :: String -> String
-run2 = const ""
+run2 = show . process2 . lines
