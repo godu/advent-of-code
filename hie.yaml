@@ -1,8 +1,25 @@
 cradle:
   stack:
-    - path: test
-      component: "advent-of-code:test:advent-of-code-test"
-    - path: src
+    - path: "./src"
       component: "advent-of-code:lib"
-    - path: app
-      component: "advent-of-code:exe:advent-of-code-exe"
+
+    - path: "./app/Year2020.hs"
+      component: "advent-of-code:exe:advent-of-code-2020-exe"
+
+    - path: "./app/Year2021.hs"
+      component: "advent-of-code:exe:advent-of-code-2020-exe"
+
+    - path: "./app/Paths_advent_of_code.hs"
+      component: "advent-of-code:exe:advent-of-code-2020-exe"
+
+    - path: "./app/Year2021.hs"
+      component: "advent-of-code:exe:advent-of-code-2021-exe"
+
+    - path: "./app/Year2020.hs"
+      component: "advent-of-code:exe:advent-of-code-2021-exe"
+
+    - path: "./app/Paths_advent_of_code.hs"
+      component: "advent-of-code:exe:advent-of-code-2021-exe"
+
+    - path: "./test"
+      component: "advent-of-code:test:advent-of-code-test"
