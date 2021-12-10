@@ -6,7 +6,6 @@ where
 
 import Data.List (find, unfoldr)
 import qualified Data.Set as S (Set, empty, insert)
-import Debug.Trace (traceShowId)
 import Text.ParserCombinators.ReadP (eof, sepBy, skipSpaces, string)
 import Text.Read (Read (readPrec), ReadPrec, lift, minPrec, readPrec_to_P)
 

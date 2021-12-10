@@ -10,7 +10,6 @@ where
 
 import Data.List (sort)
 import Data.Maybe (mapMaybe)
-import Debug.Trace (traceShow, traceShowId)
 
 data State = Complete | Corrupted Char | Incomplete String
   deriving (Show)

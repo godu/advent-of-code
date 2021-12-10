@@ -6,7 +6,6 @@ where
 
 import Data.Ix (range)
 import Data.List.Extra (nub, sort, splitOn)
-import Debug.Trace (trace, traceShowId)
 
 median :: [Int] -> Int
 median x =

@@ -13,7 +13,6 @@ import Data.List (find, inits, transpose, uncons, (\\))
 import Data.List.Extra (firstJust)
 import Data.Maybe (fromMaybe)
 import qualified Data.Set as S (Set, empty, insert)
-import Debug.Trace (traceShow, traceShowId)
 import Text.ParserCombinators.ReadP (ReadP, char, many, munch1, sepBy1, string)
 import Text.Read (Read (readPrec), lift, minPrec, readPrec_to_P)
 

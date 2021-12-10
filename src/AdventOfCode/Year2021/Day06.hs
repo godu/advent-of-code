@@ -6,7 +6,6 @@ where
 
 import Data.Function (fix)
 import Data.List.Split (splitOn)
-import Debug.Trace (traceShow, traceShowId)
 
 nTimes :: Int -> (a -> a) -> (a -> a)
 nTimes 0 _ = id

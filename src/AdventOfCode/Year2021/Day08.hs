@@ -9,7 +9,6 @@ import Data.List (permutations, sort)
 import Data.List.Extra (stripInfix)
 import Data.Map (Map, fromList, (!), (!?))
 import Data.Maybe (fromMaybe, isJust)
-import Debug.Trace (traceShow, traceShowId)
 
 decode :: [Char] -> Maybe Int
 decode ['a', 'b', 'c', 'e', 'f', 'g'] = Just 0

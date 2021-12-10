@@ -10,7 +10,6 @@ import Data.Bifunctor (bimap)
 import Data.Function (on)
 import Data.List (group, groupBy, partition, sort, sortBy, transpose, unfoldr)
 import Data.List.Extra (maximumOn, minimumOn)
-import Debug.Trace (traceShowId)
 import GHC.Exts (groupWith)
 
 binaryToInt :: String -> Int

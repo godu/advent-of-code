@@ -107,7 +107,7 @@ possibilities xs =
   where
     solvedFields = concat $ filter ((<= 1) . length) xs
 
--- possibilities = head . foldr go [[]] . traceShowId
+-- possibilities = head . foldr go [[]]
 --   where
 --     go :: [String] -> [[String]] -> [[String]]
 --     go xs acc =

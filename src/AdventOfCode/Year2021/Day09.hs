@@ -14,7 +14,6 @@ import Data.Char (digitToInt)
 import Data.List (nub, sort, unfoldr)
 import Data.Map (Map, delete, elems, filterWithKey, fromList, keys, member, toList, (!), (!?))
 import Data.Maybe (mapMaybe)
-import Debug.Trace (traceShow, traceShowId)
 
 type Point = (Int, Int)
 
