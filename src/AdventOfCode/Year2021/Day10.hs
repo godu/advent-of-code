@@ -1,5 +1,3 @@
-{-# LANGUAGE LambdaCase #-}
-
 module AdventOfCode.Year2021.Day10
   ( run1,
     process1,
