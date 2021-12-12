@@ -1,8 +1,6 @@
 module AdventOfCode.Year2021.DayXX
   ( run1,
-    process1,
     run2,
-    process2,
   )
 where
 

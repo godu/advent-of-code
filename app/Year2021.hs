@@ -14,8 +14,7 @@ import qualified AdventOfCode.Year2021.Day08 as Day08 (run1, run2)
 import qualified AdventOfCode.Year2021.Day09 as Day09 (run1, run2)
 import qualified AdventOfCode.Year2021.Day10 as Day10 (run1, run2)
 import qualified AdventOfCode.Year2021.Day11 as Day11 (run1, run2)
-
--- import qualified AdventOfCode.Year2021.Day12 as Day12 (run1, run2)
+import qualified AdventOfCode.Year2021.Day12 as Day12 (run1, run2)
 -- import qualified AdventOfCode.Year2021.Day13 as Day13 (run1, run2)
 -- import qualified AdventOfCode.Year2021.Day14 as Day14 (run1, run2)
 -- import qualified AdventOfCode.Year2021.Day15 as Day15 (run1, run2)
@@ -29,6 +28,7 @@ import qualified AdventOfCode.Year2021.Day11 as Day11 (run1, run2)
 -- import qualified AdventOfCode.Year2021.Day23 as Day23 (run1, run2)
 -- import qualified AdventOfCode.Year2021.Day24 as Day24 (run1, run2)
 -- import qualified AdventOfCode.Year2021.Day25 as Day25 (run1)
+import qualified AdventOfCode.Year2021.DayXX as DayXX (run1, run2)
 
 main :: IO ()
 main = do
@@ -87,71 +87,76 @@ main = do
   print $ "Result #1: " <> Day11.run1 fixture
   print $ "Result #2: " <> Day11.run2 fixture
 
--- print "Day12"
--- fixture <- readFile "app/Inputs/Year2021/Day12.txt"
--- print $ "Result #1: " <> Day12.run1 fixture
--- print $ "Result #2: " <> Day12.run2 fixture
+  print "Day12"
+  fixture <- readFile "app/Inputs/Year2021/Day12.txt"
+  print $ "Result #1: " <> Day12.run1 fixture
+  print $ "Result #2: " <> Day12.run2 fixture
 
--- print "Day13"
--- fixture <- readFile "app/Inputs/Year2021/Day13.txt"
--- print $ "Result #1: " <> Day13.run1 fixture
--- print $ "Result #2: " <> Day13.run2 fixture
+  -- print "Day13"
+  -- fixture <- readFile "app/Inputs/Year2021/Day13.txt"
+  -- print $ "Result #1: " <> Day13.run1 fixture
+  -- print $ "Result #2: " <> Day13.run2 fixture
 
--- print "Day14"
--- fixture <- readFile "app/Inputs/Year2021/Day14.txt"
--- print $ "Result #1: " <> Day14.run1 fixture
--- print $ "Result #2: " <> Day14.run2 fixture
+  -- print "Day14"
+  -- fixture <- readFile "app/Inputs/Year2021/Day14.txt"
+  -- print $ "Result #1: " <> Day14.run1 fixture
+  -- print $ "Result #2: " <> Day14.run2 fixture
 
--- print "Day15"
--- fixture <- readFile "app/Inputs/Year2021/Day15.txt"
--- print $ "Result #1: " <> Day15.run1 fixture
--- print $ "Result #2: " <> Day15.run2 fixture
+  -- print "Day15"
+  -- fixture <- readFile "app/Inputs/Year2021/Day15.txt"
+  -- print $ "Result #1: " <> Day15.run1 fixture
+  -- print $ "Result #2: " <> Day15.run2 fixture
 
--- print "Day16"
--- fixture <- readFile "app/Inputs/Year2021/Day16.txt"
--- print $ "Result #1: " <> Day16.run1 fixture
--- print $ "Result #2: " <> Day16.run2 fixture
+  -- print "Day16"
+  -- fixture <- readFile "app/Inputs/Year2021/Day16.txt"
+  -- print $ "Result #1: " <> Day16.run1 fixture
+  -- print $ "Result #2: " <> Day16.run2 fixture
 
--- print "Day17"
--- fixture <- readFile "app/Inputs/Year2021/Day17.txt"
--- print $ "Result #1: " <> Day17.run1 fixture
--- print $ "Result #2: " <> Day17.run2 fixture
+  -- print "Day17"
+  -- fixture <- readFile "app/Inputs/Year2021/Day17.txt"
+  -- print $ "Result #1: " <> Day17.run1 fixture
+  -- print $ "Result #2: " <> Day17.run2 fixture
 
--- print "Day18"
--- fixture <- readFile "app/Inputs/Year2021/Day18.txt"
--- print $ "Result #1: " <> Day18.run1 fixture
--- print $ "Result #2: " <> Day18.run2 fixture
+  -- print "Day18"
+  -- fixture <- readFile "app/Inputs/Year2021/Day18.txt"
+  -- print $ "Result #1: " <> Day18.run1 fixture
+  -- print $ "Result #2: " <> Day18.run2 fixture
 
--- print "Day19"
--- fixture <- readFile "app/Inputs/Year2021/Day19.txt"
--- print $ "Result #1: " <> Day19.run1 fixture
--- print $ "Result #2: " <> Day19.run2 fixture
+  -- print "Day19"
+  -- fixture <- readFile "app/Inputs/Year2021/Day19.txt"
+  -- print $ "Result #1: " <> Day19.run1 fixture
+  -- print $ "Result #2: " <> Day19.run2 fixture
 
--- print "Day20"
--- fixture <- readFile "app/Inputs/Year2021/Day20.txt"
--- print $ "Result #1: " <> Day20.run1 fixture
--- print $ "Result #2: " <> Day20.run2 fixture
+  -- print "Day20"
+  -- fixture <- readFile "app/Inputs/Year2021/Day20.txt"
+  -- print $ "Result #1: " <> Day20.run1 fixture
+  -- print $ "Result #2: " <> Day20.run2 fixture
 
--- print "Day21"
--- fixture <- readFile "app/Inputs/Year2021/Day21.txt"
--- print $ "Result #1: " <> Day21.run1 fixture
--- print $ "Result #2: " <> Day21.run2 fixture
+  -- print "Day21"
+  -- fixture <- readFile "app/Inputs/Year2021/Day21.txt"
+  -- print $ "Result #1: " <> Day21.run1 fixture
+  -- print $ "Result #2: " <> Day21.run2 fixture
 
--- print "Day22"
--- fixture <- readFile "app/Inputs/Year2021/Day22.txt"
--- print $ "Result #1: " <> Day22.run1 fixture
--- print $ "Result #2: " <> Day22.run2 fixture
+  -- print "Day22"
+  -- fixture <- readFile "app/Inputs/Year2021/Day22.txt"
+  -- print $ "Result #1: " <> Day22.run1 fixture
+  -- print $ "Result #2: " <> Day22.run2 fixture
 
--- print "Day23"
--- fixture <- readFile "app/Inputs/Year2021/Day23.txt"
--- print $ "Result #1: " <> Day23.run1 fixture
--- print $ "Result #2: " <> Day23.run2 fixture
+  -- print "Day23"
+  -- fixture <- readFile "app/Inputs/Year2021/Day23.txt"
+  -- print $ "Result #1: " <> Day23.run1 fixture
+  -- print $ "Result #2: " <> Day23.run2 fixture
 
--- print "Day24"
--- fixture <- readFile "app/Inputs/Year2021/Day24.txt"
--- print $ "Result #1: " <> Day24.run1 fixture
--- print $ "Result #2: " <> Day24.run2 fixture
+  -- print "Day24"
+  -- fixture <- readFile "app/Inputs/Year2021/Day24.txt"
+  -- print $ "Result #1: " <> Day24.run1 fixture
+  -- print $ "Result #2: " <> Day24.run2 fixture
 
--- print "Day25"
--- fixture <- readFile "app/Inputs/Year2021/Day25.txt"
--- print $ "Result #1: " <> Day25.run1 fixture
+  -- print "Day25"
+  -- fixture <- readFile "app/Inputs/Year2021/Day25.txt"
+  -- print $ "Result #1: " <> Day25.run1 fixture
+
+  print "DayXX"
+  fixture <- readFile "app/Inputs/Year2021/DayXX.txt"
+  print $ "Result #1: " <> DayXX.run1 fixture
+  print $ "Result #2: " <> DayXX.run2 fixture
