@@ -3,7 +3,7 @@ module AdventOfCode.Year2021.DayXXSpec
   )
 where
 
-import AdventOfCode.Year2021.Day11
+import AdventOfCode.Year2021.DayXX
   ( run1,
     run2,
   )
