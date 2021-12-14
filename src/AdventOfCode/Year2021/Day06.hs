@@ -4,13 +4,9 @@ module AdventOfCode.Year2021.Day06
   )
 where
 
+import AdventOfCode.Utils (nTimes)
 import Data.Function (fix)
 import Data.List.Split (splitOn)
-
-nTimes :: Int -> (a -> a) -> (a -> a)
-nTimes 0 _ = id
-nTimes 1 f = f
-nTimes n f = f . nTimes (n -1) f
 
 type Population = (Int, Int, Int, Int, Int, Int, Int, Int, Int)
 

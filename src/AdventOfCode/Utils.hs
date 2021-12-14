@@ -1,4 +1,4 @@
-module AdventOfCode.Utils (read', readMaybe', singleton) where
+module AdventOfCode.Utils (read', readMaybe', singleton, nTimes) where
 
 import Text.ParserCombinators.ReadP (skipSpaces)
 import Text.ParserCombinators.ReadPrec (minPrec, readPrec_to_S)
@@ -31,3 +31,8 @@ readEither' readPrec s =
 
 singleton :: a -> [a]
 singleton x = [x]
+
+nTimes :: Int -> (c -> c) -> c -> c
+nTimes 0 _ = id
+nTimes 1 f = f
+nTimes n f = f . nTimes (n -1) f
