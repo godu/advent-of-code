@@ -16,20 +16,20 @@ import Text.Read (lift, readPrec)
 
 type Point = (Int, Int)
 
-data TargetArea = TargetArea Point Point deriving (Show)
+data TargetArea = TargetArea Int Int Int Int deriving (Show)
 
 instance Read TargetArea where
   readPrec = do
     lift $ string "target area: x="
-    a <- readPrec
+    left <- readPrec
     lift $ string ".."
-    b <- readPrec
+    right <- readPrec
     lift $ string ", y="
-    c <- readPrec
+    bottom <- readPrec
     lift $ string ".."
-    d <- readPrec
+    top <- readPrec
     lift $ string "\n"
-    return $ TargetArea (a, d) (b, c)
+    return $ TargetArea left right bottom top
 
 data Probe = Probe {position :: Point, velocity :: Point} deriving (Show)
 
@@ -42,37 +42,36 @@ nextStep (Probe p v) =
 throw :: TargetArea -> Probe -> [Probe]
 throw t = takeWhile (stop t) . iterate nextStep
   where
-    stop (TargetArea (x1, y1) (x2, y2)) (Probe (x, y) _)
-      | x > x2 = False
-      | y < y2 = False
+    stop (TargetArea left right bottom top) (Probe (x, y) _)
+      | x > right = False
+      | y < bottom = False
       | otherwise = True
 
 isIn :: TargetArea -> Probe -> Bool
-isIn (TargetArea (x1, y1) (x2, y2)) (Probe (x, y) _)
-  | inRange (x1, x2) x && inRange (y2, y1) y = True
+isIn (TargetArea left right bottom top) (Probe (x, y) _)
+  | inRange (left, right) x && inRange (bottom, top) y = True
   | otherwise = False
 
-process1 :: TargetArea -> Int
-process1 t@(TargetArea (xMin, yMin) (xMax, yMax)) =
-  maximum $
-    fmap (snd . position) $
-      snd $
-        maximumOn (snd . fst) $
-          filter
-            (any (isIn t) . snd)
-            $ fmap
-              (second (throw t . Probe (0, 0)) . dupe)
-              candidats
+aim :: TargetArea -> [(Point, [Probe])]
+aim t@(TargetArea left right bottom top) =
+  filter
+    (any (isIn t) . snd)
+    $ fmap
+      (second (throw t . Probe (0, 0)) . dupe)
+      candidats
   where
-    rangeX = [0 .. xMax]
-    rangeY = [abs yMin .. abs yMax]
+    rangeX = [0 .. right]
+    rangeY = [bottom .. - bottom]
     candidats = concatMap ((`fmap` rangeY) . (,)) rangeX
+
+process1 :: TargetArea -> Int
+process1 = maximum . fmap (snd . position) . snd . maximumOn (snd . fst) . aim
 
 run1 :: String -> String
 run1 = show . process1 . read
 
-process2 :: Int -> Int
-process2 = id
+process2 :: TargetArea -> Int
+process2 = length . aim
 
 run2 :: String -> String
-run2 = const ""
+run2 = show . process2 . read

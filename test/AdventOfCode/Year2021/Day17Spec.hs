@@ -18,5 +18,5 @@ spec = do
   it "run1" $ do
     run1 (unlines ["target area: x=20..30, y=-10..-5"]) `shouldBe` "45"
 
--- it "run2" $ do
---   run2 (unlines []) `shouldBe` ""
+  it "run2" $ do
+    run2 (unlines ["target area: x=20..30, y=-10..-5"]) `shouldBe` "112"
