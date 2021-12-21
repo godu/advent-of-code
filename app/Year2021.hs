@@ -20,7 +20,7 @@ import qualified AdventOfCode.Year2021.Day14 as Day14 (run1, run2)
 import qualified AdventOfCode.Year2021.Day15 as Day15 (run1, run2)
 import qualified AdventOfCode.Year2021.Day16 as Day16 (run1, run2)
 import qualified AdventOfCode.Year2021.Day17 as Day17 (run1, run2)
--- import qualified AdventOfCode.Year2021.Day18 as Day18 (run1, run2)
+import qualified AdventOfCode.Year2021.Day18 as Day18 (run1, run2)
 -- import qualified AdventOfCode.Year2021.Day19 as Day19 (run1, run2)
 -- import qualified AdventOfCode.Year2021.Day20 as Day20 (run1, run2)
 -- import qualified AdventOfCode.Year2021.Day21 as Day21 (run1, run2)
@@ -117,10 +117,10 @@ main = do
   putStrLn $ "Result #1: " <> Day17.run1 fixture
   putStrLn $ "Result #2: " <> Day17.run2 fixture
 
-  -- putStrLn "Day18"
-  -- fixture <- readFile "app/Inputs/Year2021/Day18.txt"
-  -- putStrLn $ "Result #1: " <> Day18.run1 fixture
-  -- putStrLn $ "Result #2: " <> Day18.run2 fixture
+  putStrLn "Day18"
+  fixture <- readFile "app/Inputs/Year2021/Day18.txt"
+  putStrLn $ "Result #1: " <> Day18.run1 fixture
+  putStrLn $ "Result #2: " <> Day18.run2 fixture
 
   -- putStrLn "Day19"
   -- fixture <- readFile "app/Inputs/Year2021/Day19.txt"
