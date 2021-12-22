@@ -1,6 +1,7 @@
 module AdventOfCode.Year2021.Day18
   ( run1,
     run2,
+    possibleTuples,
   )
 where
 
