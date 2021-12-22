@@ -4,7 +4,7 @@ module AdventOfCode.Year2021.Day16
   )
 where
 
-import AdventOfCode.Utils (read', singleton)
+import AdventOfCode.Utils (many, read', singleton)
 import Data.List.Extra (trim)
 import Text.ParserCombinators.ReadPrec (get, (+++))
 import Text.Read (ReadPrec, readPrec, (<++))
@@ -27,15 +27,6 @@ hexToBit 'D' = "1101"
 hexToBit 'E' = "1110"
 hexToBit 'F' = "1111"
 hexToBit x = error $ "Not hex : " <> show x
-
-many :: Show a => ReadPrec a -> ReadPrec [a]
-many r =
-  ( do
-      a <- r
-      as <- many r
-      return (a : as)
-  )
-    <++ return []
 
 times :: Int -> ReadPrec a -> ReadPrec [a]
 times 0 r = return []

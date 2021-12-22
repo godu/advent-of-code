@@ -1,7 +1,7 @@
-module AdventOfCode.Utils (read', readMaybe', singleton, nTimes) where
+module AdventOfCode.Utils (read', readMaybe', singleton, nTimes, many, split) where
 
 import Text.ParserCombinators.ReadP (skipSpaces)
-import Text.ParserCombinators.ReadPrec (minPrec, readPrec_to_S)
+import Text.ParserCombinators.ReadPrec (minPrec, readPrec_to_S, (<++))
 import Text.Read (ReadPrec, lift)
 
 readMaybe' :: ReadPrec a -> String -> Maybe a
@@ -36,3 +36,21 @@ nTimes :: Int -> (c -> c) -> c -> c
 nTimes 0 _ = id
 nTimes 1 f = f
 nTimes n f = f . nTimes (n -1) f
+
+many :: ReadPrec a -> ReadPrec [a]
+many r =
+  ( do
+      a <- r
+      as <- many r
+      return (a : as)
+  )
+    <++ return []
+
+split :: ReadPrec b -> ReadPrec a -> ReadPrec [a]
+split s r =
+  ( do
+      a <- r
+      as <- many (s *> r)
+      return (a : as)
+  )
+    <++ return []
