@@ -1,4 +1,4 @@
-module AdventOfCode.Utils (read', readMaybe', singleton, nTimes, many, split) where
+module AdventOfCode.Utils (read', readMaybe', singleton, nTimes, many, split, many1) where
 
 import Text.ParserCombinators.ReadP (skipSpaces)
 import Text.ParserCombinators.ReadPrec (minPrec, readPrec_to_S, (<++))
@@ -45,6 +45,13 @@ many r =
       return (a : as)
   )
     <++ return []
+
+many1 :: ReadPrec a -> ReadPrec [a]
+many1 r =
+  do
+    a <- r
+    as <- many r
+    return (a : as)
 
 split :: ReadPrec b -> ReadPrec a -> ReadPrec [a]
 split s r =

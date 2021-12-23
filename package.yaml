@@ -24,6 +24,8 @@ library:
     - vector
     - extra
     - monad-loops
+    - comonad
+    - memoize
 executables:
   advent-of-code-2020-exe:
     main: Year2020.hs
