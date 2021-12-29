@@ -8,7 +8,6 @@ module AdventOfCode.Year2021.Day09
   )
 where
 
-import AdventOfCode.Year2020.Day17 ()
 import Data.Bifunctor (Bifunctor (bimap))
 import Data.Char (digitToInt)
 import Data.List (nub, sort, unfoldr)

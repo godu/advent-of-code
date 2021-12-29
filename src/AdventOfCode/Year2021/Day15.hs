@@ -1,5 +1,3 @@
-{-# LANGUAGE TupleSections #-}
-
 module AdventOfCode.Year2021.Day15
   ( run1,
     run2,
@@ -7,7 +5,7 @@ module AdventOfCode.Year2021.Day15
 where
 
 import AdventOfCode.Utils (nTimes)
-import AdventOfCode.Year2020.Day17 ()
+import Algorithm.Search (aStar, dijkstra)
 import Data.Bifunctor (bimap, first, second)
 import Data.Char (digitToInt, intToDigit)
 import Data.Function (on)
@@ -37,36 +35,16 @@ parse =
     . zip [0 ..]
     . lines
 
-neighbors :: Point -> [Point]
-neighbors (x, y) = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
+neighbors :: Map Point Int -> Point -> [Point]
+neighbors m (x, y) = filter (`M.member` m) [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
 
 process1 :: Map Point Int -> Int
-process1 m = fromMaybe 0 $ go m (maximum $ keys m) (S.empty, [((0, 0), 0)]) M.empty
+process1 m = maybe 0 fst $ aStar (neighbors m) cost (estimate final) (== final) initial
   where
-    go :: Map Point Int -> Point -> (Set Point, [(Point, Int)]) -> Map Point Int -> Maybe Int
-    go _ _ (_, []) acc = Nothing
-    go m e (s, (p, n) : xs) acc
-      | e == p = return n
-      | p `M.member` acc = go m e (p `delete` s, xs) acc
-      | otherwise =
-        go
-          m
-          e
-          ( foldr
-              ( \(p, n) (s, xs) ->
-                  if p `S.member` s
-                    then (s, xs)
-                    else
-                      ( p `S.insert` s,
-                        L.insertBy (compare `on` snd) (p, n) xs
-                      )
-              )
-              (s, xs)
-              nextNeighbors
-          )
-          $ M.insert p n acc
-      where
-        nextNeighbors = mapMaybe (\p -> (p,) . (+ n) <$> m !? p) $ neighbors p
+    cost _ p = fromMaybe maxBound $ m !? p
+    estimate (x, y) (x', y') = (x - x') + (y - y')
+    initial = minimum $ keys m
+    final = maximum $ keys m
 
 run1 :: String -> String
 run1 = show . process1 . parse

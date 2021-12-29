@@ -26,6 +26,7 @@ library:
     - monad-loops
     - comonad
     - memoize
+    - search-algorithms
 executables:
   advent-of-code-2020-exe:
     main: Year2020.hs

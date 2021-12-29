@@ -3,7 +3,6 @@
 module AdventOfCode.Year2020.Day17
   ( run1,
     run2,
-    neighbors,
   )
 where
 

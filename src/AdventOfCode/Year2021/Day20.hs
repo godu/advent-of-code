@@ -7,7 +7,6 @@ module AdventOfCode.Year2021.Day20
 where
 
 import AdventOfCode.Utils (many, many1, nTimes, split)
-import AdventOfCode.Year2020.Day17 ()
 import Control.Comonad (Comonad, extend, extract)
 import Data.Bifunctor (first, second)
 import Data.Function.Memoize (memoize)
