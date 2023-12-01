@@ -3,7 +3,7 @@ module Year2023
   )
 where
 
--- import qualified AdventOfCode.Year2023.Day01 as Day01 (run1, run2)
+import qualified AdventOfCode.Year2023.Day01 as Day01 (run1, run2)
 -- import qualified AdventOfCode.Year2023.Day02 as Day02 (run1, run2)
 -- import qualified AdventOfCode.Year2023.Day03 as Day03 (run1, run2)
 -- import qualified AdventOfCode.Year2023.Day04 as Day04 (run1, run2)
@@ -32,10 +32,10 @@ import qualified AdventOfCode.Year2023.DayXX as DayXX (run1, run2)
 
 main :: IO ()
 main = do
-  -- putStrLn "Day01"
-  -- fixture <- readFile "app/Inputs/Year2023/Day01.txt"
-  -- putStrLn $ "Result #1: " <> Day01.run1 fixture
-  -- putStrLn $ "Result #2: " <> Day01.run2 fixture
+  putStrLn "Day01"
+  fixture <- readFile "app/Inputs/Year2023/Day01.txt"
+  putStrLn $ "Result #1: " <> Day01.run1 fixture
+  putStrLn $ "Result #2: " <> Day01.run2 fixture
 
   -- putStrLn "Day02"
   -- fixture <- readFile "app/Inputs/Year2023/Day02.txt"

@@ -70,7 +70,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        year: [2021, 2020]
+        year: [2023, 2021, 2020]
     steps:
       - name: Checkout source 📡
         uses: actions/checkout@v3
