@@ -29,10 +29,10 @@ process1 dx dy grid = length $ filter (== Tree) $ unfoldr go (0, 0)
     go (x, y)
       | x >= nbRow = Nothing
       | otherwise =
-        return
-          ( grid !! x !! y,
-            (x + dx, (y + dy) `mod` nbColumn)
-          )
+          return
+            ( grid !! x !! y,
+              (x + dx, (y + dy) `mod` nbColumn)
+            )
 
 run2 :: String -> String
 run2 = show . process2 . readGrid

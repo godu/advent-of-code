@@ -10,16 +10,17 @@ where
 
 import Data.Bifunctor (Bifunctor (bimap))
 import Data.Char (digitToInt)
-import Data.List (nub, sort, unfoldr)
+import Data.List (nub, sort, sortBy, unfoldr)
 import Data.Map (Map, delete, elems, filterWithKey, fromList, keys, member, toList, (!), (!?))
 import Data.Maybe (mapMaybe)
+import Data.Ord (Down (Down), comparing)
 
 type Point = (Int, Int)
 
 type Height = Int
 
 neighbors :: Point -> [Point]
-neighbors (x, y) = [(x - 1, y), (x + 1, y), (x, y -1), (x, y + 1)]
+neighbors (x, y) = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
 
 lowers :: Map Point Height -> Map Point Height
 lowers xs = filterWithKey (isLower xs) xs
@@ -56,11 +57,12 @@ process2 :: Map Point Height -> Int
 process2 xs =
   product $
     take 3 $
-      reverse $
-        sort $
-          fmap (length . spread xs) $
+      sortBy
+        (comparing Down)
+        ( fmap (length . spread xs) $
             keys $
               lowers xs
+        )
 
 run2 :: String -> String
 run2 =

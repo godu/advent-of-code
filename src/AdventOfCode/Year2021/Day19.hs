@@ -20,7 +20,7 @@ instance Num Point where
   (Point x y z) * (Point x' y' z') = Point (x * x') (y * y') (z * z')
   abs (Point x y z) = Point (abs x) (abs y) (abs z)
   fromInteger a = Point a' a' a' where a' = fromInteger a
-  negate (Point x y z) = Point (- x) (- y) (- z)
+  negate (Point x y z) = Point (-x) (-y) (-z)
   signum (Point x y z) = Point (signum x) (signum y) (signum z)
 
 instance Read Point where
@@ -51,36 +51,34 @@ instance Read Input where
 orientations :: [Point -> Point]
 orientations =
   [ \(Point x y z) -> Point x y z,
-    \(Point x y z) -> Point x (- z) y,
-    \(Point x y z) -> Point x (- y) (- z),
-    \(Point x y z) -> Point x z (- y),
-    \(Point x y z) -> Point z y (- x),
+    \(Point x y z) -> Point x (-z) y,
+    \(Point x y z) -> Point x (-y) (-z),
+    \(Point x y z) -> Point x z (-y),
+    \(Point x y z) -> Point z y (-x),
     \(Point x y z) -> Point z x y,
-    \(Point x y z) -> Point z (- y) x,
-    \(Point x y z) -> Point z (- x) (- y),
-    \(Point x y z) -> Point (- x) y (- z),
-    \(Point x y z) -> Point (- x) z y,
-    \(Point x y z) -> Point (- x) (- y) z,
-    \(Point x y z) -> Point (- x) (- z) (- y),
-    \(Point x y z) -> Point (- z) y x,
-    \(Point x y z) -> Point (- z) (- x) y,
-    \(Point x y z) -> Point (- z) (- y) (- x),
-    \(Point x y z) -> Point (- z) x (- y),
-    \(Point x y z) -> Point (- y) x z,
-    \(Point x y z) -> Point (- y) (- z) x,
-    \(Point x y z) -> Point (- y) (- x) (- z),
-    \(Point x y z) -> Point (- y) z (- x),
-    \(Point x y z) -> Point y (- x) z,
-    \(Point x y z) -> Point y (- z) (- x),
-    \(Point x y z) -> Point y x (- z),
+    \(Point x y z) -> Point z (-y) x,
+    \(Point x y z) -> Point z (-x) (-y),
+    \(Point x y z) -> Point (-x) y (-z),
+    \(Point x y z) -> Point (-x) z y,
+    \(Point x y z) -> Point (-x) (-y) z,
+    \(Point x y z) -> Point (-x) (-z) (-y),
+    \(Point x y z) -> Point (-z) y x,
+    \(Point x y z) -> Point (-z) (-x) y,
+    \(Point x y z) -> Point (-z) (-y) (-x),
+    \(Point x y z) -> Point (-z) x (-y),
+    \(Point x y z) -> Point (-y) x z,
+    \(Point x y z) -> Point (-y) (-z) x,
+    \(Point x y z) -> Point (-y) (-x) (-z),
+    \(Point x y z) -> Point (-y) z (-x),
+    \(Point x y z) -> Point y (-x) z,
+    \(Point x y z) -> Point y (-z) (-x),
+    \(Point x y z) -> Point y x (-z),
     \(Point x y z) -> Point y z x
   ]
 
 match :: [Scanner] -> Scanner -> [Scanner]
 match ss s =
-  filter ((`any` ss) . hasTwelveBeaconInCommon) $
-    concatMap (\s -> (`translate` s) <$> translations ss s) $
-      orientedScanners
+  concatMap (filter ((`any` ss) . hasTwelveBeaconInCommon) . (\s -> (`translate` s) <$> translations ss s)) orientedScanners
   where
     orientedScanners = fmap (`translate` s) orientations
     translations :: [Scanner] -> Scanner -> [Point -> Point]

@@ -56,9 +56,9 @@ process1 = length . visite
           concatMap
             ( go map . (: path)
             )
-            $ (`restrict` path) $
-              S.toList $
-                map ! prev
+            $ (`restrict` path)
+            $ S.toList
+            $ map ! prev
         possibilities `restrict` path =
           filter
             ( \case
@@ -85,9 +85,9 @@ process2 = length . visite
           concatMap
             ( go map . (: path)
             )
-            $ (`restrict` path) $
-              S.toList $
-                map ! prev
+            $ (`restrict` path)
+            $ S.toList
+            $ map ! prev
         possibilities `restrict` path =
           filter
             ( \case

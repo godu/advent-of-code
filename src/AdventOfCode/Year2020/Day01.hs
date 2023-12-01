@@ -21,7 +21,7 @@ combinaisons :: Int -> [a] -> [[a]]
 combinaisons _ [] = []
 combinaisons 0 xs = []
 combinaisons 1 xs = map (: []) xs
-combinaisons i (a : as) = map (a :) (combinaisons (i -1) as) <> combinaisons i as
+combinaisons i (a : as) = map (a :) (combinaisons (i - 1) as) <> combinaisons i as
 
 run1 :: String -> String
 run1 = show . process1 . fmap (extract . read) . lines

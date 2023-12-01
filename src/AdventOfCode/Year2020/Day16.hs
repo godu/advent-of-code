@@ -82,14 +82,13 @@ isValid =
 process1 :: Note -> Int
 process1 (Note rules _ tickets) =
   sum $
-    filter (not . isValid rules) $
-      concatMap numbers tickets
+    concatMap (filter (not . isValid rules) . numbers) tickets
 
 run1 :: String -> String
 run1 = show . process1 . (read :: String -> Note)
 
 validRules :: [Rule] -> [Int] -> [Rule]
-validRules rules xs = filter (\rule -> and $ isValid [rule] <$> xs) rules
+validRules rules xs = filter (\rule -> all (isValid [rule]) xs) rules
 
 possibilities :: [[String]] -> [String]
 possibilities xs =
@@ -135,7 +134,7 @@ process2 (Note rules ticket tickets) =
         fmap
           (fmap (\(Rule title _) -> title) . validRules rules)
           ( transpose $
-              filter (and . fmap (isValid rules)) $
+              filter (all (isValid rules)) $
                 fmap numbers (ticket : tickets)
           )
 

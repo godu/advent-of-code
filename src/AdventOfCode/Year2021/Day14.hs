@@ -53,7 +53,8 @@ process n input@(Input template rules) =
           . dup
           . unionsWith (+)
       )
-        $ (fromList [(firstTemplate, 1)] :) $ (counts !) <$> zip template restTemplate
+        $ (fromList [(firstTemplate, 1)] :)
+        $ (counts !) <$> zip template restTemplate
     result _ _ = 0
 
 run1 :: String -> String

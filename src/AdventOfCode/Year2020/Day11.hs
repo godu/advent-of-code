@@ -43,12 +43,12 @@ neighbors :: Grid a -> (Int, Int) -> [a]
 neighbors grid (x, y) =
   mapMaybe
     (grid !?)
-    [ (x -1, y -1),
-      (x -1, y),
-      (x -1, y + 1),
-      (x, y -1),
+    [ (x - 1, y - 1),
+      (x - 1, y),
+      (x - 1, y + 1),
+      (x, y - 1),
       (x, y + 1),
-      (x + 1, y -1),
+      (x + 1, y - 1),
       (x + 1, y),
       (x + 1, y + 1)
     ]
@@ -81,7 +81,7 @@ process1 =
         else Occupied
     computeCell _ _ x = x
 
-readGrid :: Read a => String -> Grid a
+readGrid :: (Read a) => String -> Grid a
 readGrid =
   V.fromList
     . fmap

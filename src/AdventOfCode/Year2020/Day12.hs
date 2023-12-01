@@ -107,9 +107,9 @@ process2 = uncurry (+) . bimap abs abs . (\(StateWithWaypoint position _) -> pos
     apply (StateWithWaypoint position (east, north)) (MoveEast x) = StateWithWaypoint position (east + x, north)
     apply (StateWithWaypoint position (east, north)) (MoveWest x) = StateWithWaypoint position (east - x, north)
     apply state (TurnLeft 0) = state
-    apply (StateWithWaypoint position (east, north)) (TurnLeft x) = apply (StateWithWaypoint position (- north, east)) (TurnLeft $ x - 90)
+    apply (StateWithWaypoint position (east, north)) (TurnLeft x) = apply (StateWithWaypoint position (-north, east)) (TurnLeft $ x - 90)
     apply state (TurnRight 0) = state
-    apply (StateWithWaypoint position (east, north)) (TurnRight x) = apply (StateWithWaypoint position (north, - east)) (TurnRight $ x - 90)
+    apply (StateWithWaypoint position (east, north)) (TurnRight x) = apply (StateWithWaypoint position (north, -east)) (TurnRight $ x - 90)
     apply (StateWithWaypoint (east, north) (dEast, dNorth)) (Forward x) = StateWithWaypoint (east + dEast * x, north + dNorth * x) (dEast, dNorth)
 
 run2 :: String -> String

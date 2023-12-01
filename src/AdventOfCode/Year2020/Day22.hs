@@ -72,10 +72,10 @@ process2 = answer . deck . last . rounds
     rounds :: Game -> [Game]
     rounds = takeUntilDoesntOccured . unfoldr go
       where
-        takeUntilDoesntOccured :: Ord a => [a] -> [a]
+        takeUntilDoesntOccured :: (Ord a) => [a] -> [a]
         takeUntilDoesntOccured = go S.empty
           where
-            go :: Ord a => S.Set a -> [a] -> [a]
+            go :: (Ord a) => S.Set a -> [a] -> [a]
             go _ [] = []
             go s (x : xs) =
               if x `elem` s
@@ -88,17 +88,17 @@ process2 = answer . deck . last . rounds
         go (Game (Player as) (Player [])) = Nothing
         go (Game (Player (a : as)) (Player (b : bs)))
           | a <= length as && b <= length bs =
-            return $
-              (\g -> (g, g)) $
-                if not . playerBWin $ last $ rounds (Game (Player $ take a as) (Player $ take b bs))
-                  then Game (Player (as <> [a, b])) (Player bs)
-                  else Game (Player as) (Player (bs <> [b, a]))
+              return $
+                (\g -> (g, g)) $
+                  if not . playerBWin $ last $ rounds (Game (Player $ take a as) (Player $ take b bs))
+                    then Game (Player (as <> [a, b])) (Player bs)
+                    else Game (Player as) (Player (bs <> [b, a]))
           | otherwise =
-            return $
-              (\g -> (g, g)) $
-                if a >= b
-                  then Game (Player (as <> [a, b])) (Player bs)
-                  else Game (Player as) (Player (bs <> [b, a]))
+              return $
+                (\g -> (g, g)) $
+                  if a >= b
+                    then Game (Player (as <> [a, b])) (Player bs)
+                    else Game (Player as) (Player (bs <> [b, a]))
           where
             playerBWin :: Game -> Bool
             playerBWin (Game (Player as) _) = null as

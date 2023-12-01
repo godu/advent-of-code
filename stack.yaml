@@ -1,10 +1,10 @@
-resolver: lts-18.18
+resolver: lts-21.21
 
 packages:
   - .
 
 extra-deps:
-  - memoize-1.1.1
+  - memoize-1.1.2
 
 flags:
   mintty:

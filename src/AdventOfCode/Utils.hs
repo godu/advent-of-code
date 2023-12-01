@@ -35,7 +35,7 @@ singleton x = [x]
 nTimes :: Int -> (c -> c) -> c -> c
 nTimes 0 _ = id
 nTimes 1 f = f
-nTimes n f = f . nTimes (n -1) f
+nTimes n f = f . nTimes (n - 1) f
 
 many :: ReadPrec a -> ReadPrec [a]
 many r =

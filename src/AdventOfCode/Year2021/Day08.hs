@@ -21,7 +21,7 @@ parse =
     . stripInfix " | "
 
 process1 :: [([Set Char], [Set Char])] -> Int
-process1 = length . filter ((`elem` [2, 3, 4, 7]) . length) . concatMap snd
+process1 = length . concatMap (filter ((`elem` [2, 3, 4, 7]) . length) . snd)
 
 run1 :: String -> String
 run1 =

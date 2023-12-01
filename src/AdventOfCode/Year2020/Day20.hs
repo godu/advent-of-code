@@ -99,15 +99,11 @@ puzzleToList (Puzzle puzzle) =
 combineTiles :: [[Tile]] -> Tile
 combineTiles =
   Tile 0
-    . foldr (<>) []
-    . fmap
-      ( foldr
-          (zipWith (flip (<>)))
-          (repeat [])
-          . fmap
-            ( fmap (init . tail) . init . tail . (\(Tile _ pic) -> pic)
-            )
+    . foldr
+      ( (<>)
+          . foldr (zipWith (flip (<>)) . fmap (init . tail) . init . tail . (\(Tile _ pic) -> pic)) (repeat [])
       )
+      []
 
 newtype Puzzle = Puzzle (Map (Int, Int) Tile) deriving (Show, Eq)
 
@@ -130,7 +126,7 @@ edges (Puzzle puzzle) = (`difference` allKeys) $ unions $ neighbors <$> S.toList
     allKeys :: Set (Int, Int)
     allKeys = S.fromList $ keys puzzle
     neighbors :: (Int, Int) -> Set (Int, Int)
-    neighbors (x, y) = S.fromList [(x + 1, y), (x -1, y), (x, y + 1), (x, y -1)]
+    neighbors (x, y) = S.fromList [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
 
 findPlace :: Puzzle -> [Tile] -> Maybe (Int, Int)
 findPlace puzzle tiles =
@@ -140,10 +136,7 @@ findPlace puzzle tiles =
   where
     allEdges = edges puzzle
     matchWith' tiles hashes =
-      any (matchWith hashes) $
-        concatMap
-          arrangements
-          tiles
+      any (any (matchWith hashes) . arrangements) tiles
 
 compatibleHashes :: Puzzle -> (Int, Int) -> (Maybe String, Maybe String, Maybe String, Maybe String)
 compatibleHashes (Puzzle puzzle) (x, y) =
@@ -176,13 +169,12 @@ resolve (x : xs) = listToMaybe $ go (Puzzle (M.fromList [((0, 0), x)])) xs
       where
         allArrangements = concatMap arrangements tiles
         candidates =
-          filter
-            (matchWith'' $ Puzzle puzzle)
-            $ concatMap
-              (\p -> (p,) <$> allArrangements)
-              $ S.toList $
+          concatMap
+            (filter (matchWith'' $ Puzzle puzzle) . (\p -> (p,) <$> allArrangements))
+            ( S.toList $
                 edges $
                   Puzzle puzzle
+            )
         matchWith'' puzzle (place, tile) = matchWith (compatibleHashes puzzle place) tile
 
 process1 :: [Tile] -> Int
@@ -236,10 +228,10 @@ markMonster = eachCells markMonster'
           : (c00 : '#' : c02 : c03 : '#' : c05 : c06 : '#' : c08 : c09 : '#' : c11 : c12 : '#' : c14 : c15 : '#' : c17 : c18 : c19 : cs)
           : xs
         ) =
-        (a00 : a01 : a02 : a03 : a04 : a05 : a06 : a07 : a08 : a09 : a10 : a11 : a12 : a13 : a14 : a15 : a16 : a17 : 'O' : a19 : as) :
-        ('O' : b01 : b02 : b03 : b04 : 'O' : 'O' : b07 : b08 : b09 : b10 : 'O' : 'O' : b13 : b14 : b15 : b16 : 'O' : 'O' : 'O' : bs) :
-        (c00 : 'O' : c02 : c03 : 'O' : c05 : c06 : 'O' : c08 : c09 : 'O' : c11 : c12 : 'O' : c14 : c15 : 'O' : c17 : c18 : c19 : cs) :
-        xs
+        (a00 : a01 : a02 : a03 : a04 : a05 : a06 : a07 : a08 : a09 : a10 : a11 : a12 : a13 : a14 : a15 : a16 : a17 : 'O' : a19 : as)
+          : ('O' : b01 : b02 : b03 : b04 : 'O' : 'O' : b07 : b08 : b09 : b10 : 'O' : 'O' : b13 : b14 : b15 : b16 : 'O' : 'O' : 'O' : bs)
+          : (c00 : 'O' : c02 : c03 : 'O' : c05 : c06 : 'O' : c08 : c09 : 'O' : c11 : c12 : 'O' : c14 : c15 : 'O' : c17 : c18 : c19 : cs)
+          : xs
     markMonster' xs = xs
 
 process2 :: [Tile] -> Int

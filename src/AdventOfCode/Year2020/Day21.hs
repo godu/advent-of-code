@@ -36,12 +36,12 @@ instance Read Food where
 
 deduceAllergenIngredients :: [Food] -> M.Map Allergen Ingredient
 deduceAllergenIngredients foods =
-  fmap (head . S.toList) $
-    M.filter
+  fmap (head . S.toList)
+    $ M.filter
       ((== 1) . length)
-      $ reduceAllergenIngredients $
-        foldl (M.unionWith S.intersection) M.empty $
-          indexPossibleIngredientsByAllergens <$> foods
+    $ reduceAllergenIngredients
+    $ foldl (M.unionWith S.intersection) M.empty
+    $ indexPossibleIngredientsByAllergens <$> foods
   where
     indexPossibleIngredientsByAllergens :: Food -> M.Map Allergen (Set Ingredient)
     indexPossibleIngredientsByAllergens (Food ingredients allergens) =

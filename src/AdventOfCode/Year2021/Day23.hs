@@ -60,7 +60,7 @@ canReachHome :: Hall -> Int -> Int -> Bool
 canReachHome hall h r
   | r > 3 || h > 6 = error ("Jumped out of Room or Hall " ++ show r ++ "# " ++ show h)
   | r + 1 >= h + 1 = all (\i -> hall !! i == '.') [h + 1 .. r + 1]
-  | h - 1 >= r + 2 = all (\i -> hall !! i == '.') [r + 2 .. h -1]
+  | h - 1 >= r + 2 = all (\i -> hall !! i == '.') [r + 2 .. h - 1]
   | otherwise = True
 
 neighbors :: Zustand -> [Zustand]
@@ -113,7 +113,7 @@ costTransition len (rs, h) (rs', h') = costMove len (rs, h) roomNr hallNr
     roomNr = firstDifference rs rs'
     hallNr = firstDifference h h'
 
-firstDifference :: Eq a => [a] -> [a] -> Int
+firstDifference :: (Eq a) => [a] -> [a] -> Int
 firstDifference xs ys = head [i | i <- [0 .. length xs], xs !! i /= ys !! i]
 
 solutionFound :: Int -> Zustand -> Bool

@@ -5,15 +5,15 @@
 
 packages:
 - completed:
-    hackage: memoize-1.1.1@sha256:a4c636df010564307ce1fe6e69379192de0c756f7766e61224da8a896ffd5fe1,1926
+    hackage: memoize-1.1.2@sha256:d7701b55ed63434d1e8b507d0a76bb58f2fe31b7ce329132e1ca808c7001da49,1928
     pantry-tree:
+      sha256: 8c99f1a87a270c8b8fb2238a0a94b346a986cb502753162dab909ed8b2ff44ad
       size: 687
-      sha256: 903833765b601ec1cfd8bfeb2290dffaf6e551eaf4b1754c62858b181c414843
   original:
-    hackage: memoize-1.1.1
+    hackage: memoize-1.1.2
 snapshots:
 - completed:
-    size: 586296
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/18.yaml
-    sha256: 63539429076b7ebbab6daa7656cfb079393bf644971156dc349d7c0453694ac2
-  original: lts-18.18
+    sha256: 7d4b649cf368f9076d8aa049aa44efe58950971d105892734e9957b2a26a2186
+    size: 640060
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/21/21.yaml
+  original: lts-21.21

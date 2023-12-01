@@ -55,10 +55,10 @@ execute instructions = last $ haltOnLoop fst $ (0, 0) : unfoldr go (0, 0)
         Just (Acc x) -> return ((position + 1, value + x), (position + 1, value + x))
         Just (Jmp x) -> return ((position + x, value), (position + x, value))
         Nothing -> Nothing
-    haltOnLoop :: Ord b => (a -> b) -> [a] -> [a]
+    haltOnLoop :: (Ord b) => (a -> b) -> [a] -> [a]
     haltOnLoop f xs = haltOnLoop' f xs empty
       where
-        haltOnLoop' :: Ord b => (a -> b) -> [a] -> Set b -> [a]
+        haltOnLoop' :: (Ord b) => (a -> b) -> [a] -> Set b -> [a]
         haltOnLoop' _ [] _ = []
         haltOnLoop' f (x : xs) s
           | f x `member` s = [x]

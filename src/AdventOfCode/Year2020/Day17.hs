@@ -41,7 +41,7 @@ instance Point (Int, Int, Int) where
   neighbors (x, y, z) =
     filter (/= (x, y, z)) $
       range
-        ((x - 1, y -1, z -1), (x + 1, y + 1, z + 1))
+        ((x - 1, y - 1, z - 1), (x + 1, y + 1, z + 1))
 
   ounterBounds xs =
     ( add (-1) $ foldl (append min) (0, 0, 0) xs,
@@ -65,7 +65,9 @@ generation willBeActive' (Grid grid) =
     willBeActive coord =
       willBeActive'
         (if coord `member` grid then Active else Inactive)
-        $ length $ filter (`member` grid) $ neighbors coord
+        $ length
+        $ filter (`member` grid)
+        $ neighbors coord
 
 process1 :: Grid (Int, Int, Int) -> Int
 process1 =
@@ -114,7 +116,7 @@ instance Point (Int, Int, Int, Int) where
   neighbors (x, y, z, w) =
     filter (/= (x, y, z, w)) $
       range
-        ((x - 1, y -1, z -1, w -1), (x + 1, y + 1, z + 1, w + 1))
+        ((x - 1, y - 1, z - 1, w - 1), (x + 1, y + 1, z + 1, w + 1))
 
   ounterBounds xs =
     ( add (-1) $ foldl (append min) (0, 0, 0, 0) xs,

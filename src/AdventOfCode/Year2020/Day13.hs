@@ -8,7 +8,7 @@ where
 
 import Control.Monad.Extra (fold1M)
 import Data.List.Extra (minimumOn)
-import Data.Maybe (catMaybes, fromMaybe)
+import Data.Maybe (catMaybes, fromJust, fromMaybe, mapMaybe)
 import Math.NumberTheory.Moduli.Chinese (chinese)
 import Text.ParserCombinators.ReadP (eof, sepBy, skipSpaces, string, (+++))
 import Text.ParserCombinators.ReadPrec (lift, minPrec, readPrec_to_P)
@@ -57,12 +57,12 @@ process2 (Note _ lines) =
   uncurry mod $
     fromMaybe (0, 0) $
       fold1M chinese $
-        catMaybes $
+        mapMaybe
           ( \(i, line) -> case line of
               Nothing -> Nothing
               Just l -> return (l - i, l)
           )
-            <$> zip [0 ..] lines
+          (zip [0 ..] lines)
 
 run2 :: String -> String
 run2 = show . process2 . read

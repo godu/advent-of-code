@@ -3,75 +3,99 @@ name: Continuous Integration 👮‍♂️
 on: [push]
 
 jobs:
-  ci:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source 📡
-        uses: actions/checkout@v2
-      - name: Cache Stack 📦
-        uses: actions/cache@v2
+        uses: actions/checkout@v3
+
+      - name: 'Install HLint 📡'
+        uses: haskell-actions/hlint-setup@v2
+        with:
+          version: '3.6.1'
+
+      - name: 'Run HLint 📝'
+        uses: haskell-actions/hlint-run@v2
+        with:
+          path: '["app/", "src/", "test/"]'
+          fail-on: warning
+
+  style:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source 📡
+        uses: actions/checkout@v3
+
+      - name: Styling 💅
+        uses: haskell-actions/run-ormolu@v14
+        with:
+          version: '0.7.3.0'
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source 📡
+        uses: actions/checkout@v3
+
+      - name: Cache ~/.stack 📦
+        uses: actions/cache@v3
         with:
           path: ~/.stack
           key: ${{ runner.os }}-stack-global-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}
           restore-keys: |
             ${{ runner.os }}-stack-global-
-      - name: Cache Build 📦
-        uses: actions/cache@v2
+      - name: Cache .stack-work 📦
+        uses: actions/cache@v3
         with:
           path: .stack-work
-          key: ${{ runner.os }}-stack-work-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}-${{ '**/*.hs' }}
+          key: ${{ runner.os }}-stack-work-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}-${{ hashFiles('**/*.hs') }}
           restore-keys: |
             ${{ runner.os }}-stack-work-
+
       - name: Install Stack 📡
-        uses: haskell/actions/setup@v1
+        uses: haskell-actions/setup@v2
         with:
-          ghc-version: 8.10.7
+          ghc-version: 9.4.7
           enable-stack: true
           stack-version: "latest"
-      - name: Update PATH with stack's bins
-        run: echo "${HOME}/.local/bin" >> $GITHUB_PATH
-      - name: Install HLint 📡
-        run: stack install hlint
-      - name: Install Ormolu 📡
-        run: stack install ormolu
+
       - name: Build ⚒
-        run: stack --no-terminal --system-ghc build --test --no-run-tests
-      - name: Lint 📝
-        run: hlint .
-      - name: Styling 💅
-        run: ormolu --color always --check-idempotence --mode check **/*.hs
+        run: stack build --test --no-run-tests
+
       - name: Test 🚧
-        run: stack --no-terminal --system-ghc test
+        run: stack test
+
   run:
-    needs: ci
+    needs: [lint, style, test]
     runs-on: ubuntu-latest
     strategy:
       matrix:
         year: [2021, 2020]
     steps:
       - name: Checkout source 📡
-        uses: actions/checkout@v2
-      - name: Cache Stack 📦
-        uses: actions/cache@v2
+        uses: actions/checkout@v3
+
+      - name: Cache ~/.stack 📦
+        uses: actions/cache@v3
         with:
           path: ~/.stack
           key: ${{ runner.os }}-stack-global-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}
           restore-keys: |
             ${{ runner.os }}-stack-global-
-      - name: Cache Build 📦
-        uses: actions/cache@v2
+      - name: Cache .stack-work 📦
+        uses: actions/cache@v3
         with:
           path: .stack-work
-          key: ${{ runner.os }}-stack-work-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}-${{ '**/*.hs' }}
+          key: ${{ runner.os }}-stack-work-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}-${{ hashFiles('**/*.hs') }}
           restore-keys: |
             ${{ runner.os }}-stack-work-
+
       - name: Install Stack 📡
-        uses: haskell/actions/setup@v1
+        uses: haskell-actions/setup@v2
         with:
-          ghc-version: 8.10.7
+          ghc-version: 9.4.7
           enable-stack: true
           stack-version: "latest"
-      - name: Update PATH with stack's bins
-        run: echo "${HOME}/.local/bin" >> $GITHUB_PATH
+
       - name: Run 🚀
-        run: stack --no-terminal --system-ghc run advent-of-code-${{ matrix.year }}-exe
+        run: stack run advent-of-code-${{ matrix.year }}-exe

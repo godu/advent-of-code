@@ -61,7 +61,7 @@ aim t@(TargetArea left right bottom top) =
       candidats
   where
     rangeX = [0 .. right]
-    rangeY = [bottom .. - bottom]
+    rangeY = [bottom .. -bottom]
     candidats = concatMap ((`fmap` rangeY) . (,)) rangeX
 
 process1 :: TargetArea -> Int

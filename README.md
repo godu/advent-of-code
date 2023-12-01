@@ -7,7 +7,7 @@
 ## Install
 
 ```shell
-stack install hlint ormolu
+stack install hlint ormolu apply-refact
 ```
 
 ## Build
@@ -21,7 +21,7 @@ stack build --test --haddock --no-haddock-hyperlink-source
 ```shell
 hlint .
 ormolu --color always --check-idempotence --mode check **/*.hs
-stack test [--file-watch --fast]
+stack test [--file-watch --fast] [--ta "--match \"Year202X.DayXX\""]
 ```
 
 ## Run

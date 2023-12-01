@@ -99,7 +99,7 @@ instance Read EnhancementAlgorithm where
       EnhancementAlgorithm $
         listArray (0, 511) pixels
 
-binaryToInt :: Enum a => [a] -> Int
+binaryToInt :: (Enum a) => [a] -> Int
 binaryToInt bits =
   fst $
     foldr
@@ -131,13 +131,13 @@ enhance n algo = nTimes n (nextStep algo)
       Picture i ((top - 1, bottom + 1), (left - 1, right + 1)) w
     compute :: EnhancementAlgorithm -> Picture Pixel -> Pixel
     compute algo (Picture i r w) =
-      calculatePixel algo $
-        ( \(a, b, c, d, e, f, g, h, i) ->
-            (w a, w b, w c, w d, w e, w f, w g, w h, w i)
-        )
-          $ neighbors i
+      calculatePixel algo
+        $ ( \(a, b, c, d, e, f, g, h, i) ->
+              (w a, w b, w c, w d, w e, w f, w g, w h, w i)
+          )
+        $ neighbors i
 
-render :: Show a => Picture a -> Map (Int, Int) a
+render :: (Show a) => Picture a -> Map (Int, Int) a
 render (Picture _ ((top, bottom), (left, right)) w) = fromList $ (\p -> (p, w p)) <$> points
   where
     points = (\x -> (x,) <$> [top .. bottom]) `concatMap` [left .. right]

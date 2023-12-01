@@ -54,17 +54,17 @@ initialize = sum . fmap count . foldl go []
       | yMax' < yMin || yMax < yMin' = [a]
       | zMax' < zMin || zMax < zMin' = [a]
       | inRange (xMin, xMax) (xMin' - 1) =
-        Cuboid (xMin, xMin' - 1) (yMin, yMax) (zMin, zMax) : Cuboid (xMin', xMax) (yMin, yMax) (zMin, zMax) `substract` b
+          Cuboid (xMin, xMin' - 1) (yMin, yMax) (zMin, zMax) : Cuboid (xMin', xMax) (yMin, yMax) (zMin, zMax) `substract` b
       | inRange (xMin, xMax) (xMax' + 1) =
-        Cuboid (xMax' + 1, xMax) (yMin, yMax) (zMin, zMax) : Cuboid (xMin, xMax') (yMin, yMax) (zMin, zMax) `substract` b
+          Cuboid (xMax' + 1, xMax) (yMin, yMax) (zMin, zMax) : Cuboid (xMin, xMax') (yMin, yMax) (zMin, zMax) `substract` b
       | inRange (yMin, yMax) (yMin' - 1) =
-        Cuboid (xMin, xMax) (yMin, yMin' - 1) (zMin, zMax) : Cuboid (xMin, xMax) (yMin', yMax) (zMin, zMax) `substract` b
+          Cuboid (xMin, xMax) (yMin, yMin' - 1) (zMin, zMax) : Cuboid (xMin, xMax) (yMin', yMax) (zMin, zMax) `substract` b
       | inRange (yMin, yMax) (yMax' + 1) =
-        Cuboid (xMin, xMax) (yMax' + 1, yMax) (zMin, zMax) : Cuboid (xMin, xMax) (yMin, yMax') (zMin, zMax) `substract` b
+          Cuboid (xMin, xMax) (yMax' + 1, yMax) (zMin, zMax) : Cuboid (xMin, xMax) (yMin, yMax') (zMin, zMax) `substract` b
       | inRange (zMin, zMax) (zMin' - 1) =
-        Cuboid (xMin, xMax) (yMin, yMax) (zMin, zMin' - 1) : Cuboid (xMin, xMax) (yMin, yMax) (zMin', zMax) `substract` b
+          Cuboid (xMin, xMax) (yMin, yMax) (zMin, zMin' - 1) : Cuboid (xMin, xMax) (yMin, yMax) (zMin', zMax) `substract` b
       | inRange (zMin, zMax) (zMax' + 1) =
-        Cuboid (xMin, xMax) (yMin, yMax) (zMax' + 1, zMax) : Cuboid (xMin, xMax) (yMin, yMax) (zMin, zMax') `substract` b
+          Cuboid (xMin, xMax) (yMin, yMax) (zMax' + 1, zMax) : Cuboid (xMin, xMax) (yMin, yMax) (zMin, zMax') `substract` b
       | otherwise = []
 
 process1 :: [Step] -> Int
