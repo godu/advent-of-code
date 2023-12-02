@@ -4,7 +4,7 @@ module Year2023
 where
 
 import qualified AdventOfCode.Year2023.Day01 as Day01 (run1, run2)
--- import qualified AdventOfCode.Year2023.Day02 as Day02 (run1, run2)
+import qualified AdventOfCode.Year2023.Day02 as Day02 (run1, run2)
 -- import qualified AdventOfCode.Year2023.Day03 as Day03 (run1, run2)
 -- import qualified AdventOfCode.Year2023.Day04 as Day04 (run1, run2)
 -- import qualified AdventOfCode.Year2023.Day05 as Day05 (run1, run2)
@@ -37,10 +37,10 @@ main = do
   putStrLn $ "Result #1: " <> Day01.run1 fixture
   putStrLn $ "Result #2: " <> Day01.run2 fixture
 
-  -- putStrLn "Day02"
-  -- fixture <- readFile "app/Inputs/Year2023/Day02.txt"
-  -- putStrLn $ "Result #1: " <> Day02.run1 fixture
-  -- putStrLn $ "Result #2: " <> Day02.run2 fixture
+  putStrLn "Day02"
+  fixture <- readFile "app/Inputs/Year2023/Day02.txt"
+  putStrLn $ "Result #1: " <> Day02.run1 fixture
+  putStrLn $ "Result #2: " <> Day02.run2 fixture
 
   -- putStrLn "Day03"
   -- fixture <- readFile "app/Inputs/Year2023/Day03.txt"
