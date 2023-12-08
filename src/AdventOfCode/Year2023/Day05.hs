@@ -6,9 +6,10 @@ where
 
 import Control.Applicative ((<|>))
 import Data.Foldable (Foldable (fold), find)
-import Data.Ix (Ix (inRange))
-import Data.List (sortOn)
+import Data.Ix (inRange)
+import Data.List (sortOn, (\\))
 import Data.Maybe (fromMaybe)
+import Debug.Trace (traceShow)
 import Text.ParserCombinators.ReadP (char, sepBy1, string)
 import Text.Read (Read (readPrec), ReadPrec, lift, readPrec_to_P, readPrec_to_S)
 
@@ -113,15 +114,23 @@ process1 alamanac =
 run1 :: String -> String
 run1 = show . process1 . read
 
+type Range = (Int, Int)
+
+data Mapping = Mapping
+  { sourceRange :: Range,
+    offset :: Int
+  }
+  deriving (Show)
+
 data Almanac' = Almanac'
-  { seeds' :: [(Int, Int)],
-    seedToSoilMap' :: [(Int, Int, Int)],
-    soilToFertilizerMap' :: [(Int, Int, Int)],
-    fertilizerToWaterMap' :: [(Int, Int, Int)],
-    waterToLightMap' :: [(Int, Int, Int)],
-    lightToTemperatureMap' :: [(Int, Int, Int)],
-    temperatureToHumidityMap' :: [(Int, Int, Int)],
-    humidityToLocationMap' :: [(Int, Int, Int)]
+  { seeds' :: [Range],
+    seedToSoilMap' :: [Mapping],
+    soilToFertilizerMap' :: [Mapping],
+    fertilizerToWaterMap' :: [Mapping],
+    waterToLightMap' :: [Mapping],
+    lightToTemperatureMap' :: [Mapping],
+    temperatureToHumidityMap' :: [Mapping],
+    humidityToLocationMap' :: [Mapping]
   }
   deriving (Show)
 
@@ -159,94 +168,71 @@ instance Read Almanac' where
     humidityToLocationMap <- lift $ readPrec_to_P readPrecMapping 0 `sepBy1` char '\n'
     return $ Almanac' seeds seedToSoilMap soilToFertilizerMap fertilizerToWaterMap waterToLightMap lightToTemperatureMap temperatureToHumidityMap humidityToLocationMap
     where
-      sortBySourceRangeStart :: [(Int, Int, Int)] -> [(Int, Int, Int)]
-      sortBySourceRangeStart = sortOn (\(_, sourceRangeStart, _) -> sourceRangeStart)
-      readPrecMapping :: ReadPrec (Int, Int, Int)
+      sortBySourceRangeStart :: [Mapping] -> [Mapping]
+      sortBySourceRangeStart = sortOn (fst . sourceRange)
+      readPrecMapping :: ReadPrec Mapping
       readPrecMapping = do
         a <- readPrec
         lift $ char ' '
         b <- readPrec
         lift $ char ' '
         c <- readPrec
-        return (a, b, c)
-      readPrecRange :: ReadPrec (Int, Int)
+        return $ Mapping (b, b + c - 1) (a - b)
+      readPrecRange :: ReadPrec Range
       readPrecRange = do
         a <- readPrec
         lift $ char ' '
         b <- readPrec
-        return (a, b)
+        return (a, a + b - 1)
 
 process2 :: Almanac' -> Int
 process2 almanac =
   minimum $
     fst
-      <$> ( humidityToLocation almanac
-              =<< temperatureToHumidity almanac
-              =<< lightToTemperature almanac
-              =<< waterToLight almanac
-              =<< fertilizerToWater almanac
-              =<< soilToFertilizer almanac
-              =<< seedToSoil almanac
+      <$> (
+            -- humidityToLocation almanac
+            --       =<< temperatureToHumidity almanac
+            --       =<< lightToTemperature almanac
+            --       =<< waterToLight almanac
+            --       =<< fertilizerToWater almanac
+            --       =<< soilToFertilizer almanac
+            --       =<<
+            seedToSoil almanac
               =<< seeds' almanac
           )
   where
-    createTransition :: (Almanac' -> [(Int, Int, Int)]) -> Almanac' -> (Int, Int) -> [(Int, Int)]
-    createTransition _ _ (_, 0) = []
-    createTransition getMapping almanac (start, length) =
-      fromMaybe [(start, length)] $
-        buildInMapping (start, length)
-          <$> findMapping mappings start
-          <|> buildAfterMapping (start, length)
-            <$> findNextMapping mappings start
-      where
-        mappings = getMapping almanac
-        buildInMapping :: (Int, Int) -> (Int, Int, Int) -> [(Int, Int)]
-        buildInMapping (start, length) (destinationRangeStart, sourceRangeStart, rangeLength) =
-          if end < sourceRangeEnd
-            then [(nextStart, length)]
-            else
-              (nextStart, nextLength)
-                : createTransition getMapping almanac (start + nextLength, length - nextLength)
-          where
-            end = start + length
-            sourceRangeEnd = sourceRangeStart + rangeLength
-            nextStart = destinationRangeStart + (start - sourceRangeStart)
-            nextLength = length - (end - sourceRangeEnd)
+    matchedMapping range = find (inRange range . sourceRange) (seedToSoilMap' almanac)
 
-        buildAfterMapping :: (Int, Int) -> (Int, Int, Int) -> [(Int, Int)]
-        buildAfterMapping (start, length) (destinationRangeStart, sourceRangeStart, rangeLength) =
-          if end < sourceRangeStart
-            then [(start, length)]
-            else
-              (start, nextLength)
-                : createTransition getMapping almanac (sourceRangeStart, length - nextLength)
-          where
-            end = start + length
-            sourceRangeEnd = sourceRangeStart + rangeLength
-            nextLength = sourceRangeStart - start
+    seedToSoil :: Almanac' -> Range -> [Range]
+    seedToSoil almanac (start, end) = traceShow ("seedToSoil", start, end) []
 
-        findMapping :: [(Int, Int, Int)] -> Int -> Maybe (Int, Int, Int)
-        findMapping mappings seed = matchWithRange seed `find` mappings
-          where
-            matchWithRange seed (_, sourceRangeStart, rangeLength) =
-              (sourceRangeStart, sourceRangeStart + rangeLength - 1) `inRange` seed
-        findNextMapping :: [(Int, Int, Int)] -> Int -> Maybe (Int, Int, Int)
-        findNextMapping mappings seed = (\(_, sourceRangeStart, _) -> seed <= sourceRangeStart) `find` mappings
+    rangesOverlap :: Range -> Range -> Bool
+    rangesOverlap (start1, end1) (start2, end2) =
+      inRange (start1, end1) start2
+        || inRange (start1, end1) end2
+        || inRange (start2, end2) start1
+        || inRange (start2, end2) end1
 
-    seedToSoil :: Almanac' -> (Int, Int) -> [(Int, Int)]
-    seedToSoil = createTransition seedToSoilMap'
-    soilToFertilizer :: Almanac' -> (Int, Int) -> [(Int, Int)]
-    soilToFertilizer = createTransition soilToFertilizerMap'
-    fertilizerToWater :: Almanac' -> (Int, Int) -> [(Int, Int)]
-    fertilizerToWater = createTransition fertilizerToWaterMap'
-    waterToLight :: Almanac' -> (Int, Int) -> [(Int, Int)]
-    waterToLight = createTransition waterToLightMap'
-    lightToTemperature :: Almanac' -> (Int, Int) -> [(Int, Int)]
-    lightToTemperature = createTransition lightToTemperatureMap'
-    temperatureToHumidity :: Almanac' -> (Int, Int) -> [(Int, Int)]
-    temperatureToHumidity = createTransition temperatureToHumidityMap'
-    humidityToLocation :: Almanac' -> (Int, Int) -> [(Int, Int)]
-    humidityToLocation = createTransition humidityToLocationMap'
+    isEmpty = uncurry (==)
+
+    intersection :: Range -> Range -> [Range]
+    intersection (start1, end1) (start2, end2) = filter (not . isEmpty) [(max start1 start2, min end1 end2)]
+
+    difference :: Range -> Range -> [Range]
+    difference (start1, end1) (start2, end2) =
+      intersection (start1, end1) (start2, end2)
+        \\ ( split end2
+               =<< split start2
+               =<< split end1
+               =<< split start1
+               =<< (min start1 start2, max end1 end2)
+           )
+
+    split :: Int -> Range -> [Range]
+    split splitPoint (start, end) =
+      if inRange (start, end) splitPoint
+        then [(start, splitPoint - 1), (splitPoint, end)]
+        else [(start, end)]
 
 run2 :: String -> String
 run2 = show . process2 . read

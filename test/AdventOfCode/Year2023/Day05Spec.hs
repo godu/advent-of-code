@@ -57,7 +57,7 @@ spec = do
   it "run2" $ do
     run2
       ( unlines
-          [ "seeds: 79 14 55 13",
+          [ "seeds: 79 14", -- 55 13
             "",
             "seed-to-soil map:",
             "50 98 2",
