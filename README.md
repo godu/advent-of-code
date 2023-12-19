@@ -21,11 +21,11 @@ stack build --test --haddock --no-haddock-hyperlink-source
 ```shell
 hlint .
 ormolu --color always --check-idempotence --mode check **/*.hs
-stack test [--file-watch --fast] [--ta "--match \"Year202X.DayXX\""]
+stack test [--file-watch --fast] [--ta "--match \"Year20XX.DayXX\""]
 ```
 
 ## Run
 
 ```shell
-stack run
+stack run advent-of-code-20XX-exe
 ```
