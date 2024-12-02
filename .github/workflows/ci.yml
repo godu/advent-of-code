@@ -4,15 +4,15 @@ on: [push]
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout source 📡
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 'Install HLint 📡'
         uses: haskell-actions/hlint-setup@v2
         with:
-          version: '3.6.1'
+          version: '3.8'
 
       - name: 'Run HLint 📝'
         uses: haskell-actions/hlint-run@v2
@@ -21,31 +21,31 @@ jobs:
           fail-on: warning
 
   style:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout source 📡
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Styling 💅
-        uses: haskell-actions/run-ormolu@v14
+        uses: haskell-actions/run-ormolu@v16
         with:
-          version: '0.7.3.0'
+          version: '0.7.7.0'
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout source 📡
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Cache ~/.stack 📦
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.stack
           key: ${{ runner.os }}-stack-global-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}
           restore-keys: |
             ${{ runner.os }}-stack-global-
       - name: Cache .stack-work 📦
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .stack-work
           key: ${{ runner.os }}-stack-work-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}-${{ hashFiles('**/*.hs') }}
@@ -55,7 +55,7 @@ jobs:
       - name: Install Stack 📡
         uses: haskell-actions/setup@v2
         with:
-          ghc-version: 9.4.7
+          ghc-version: 9.6.6
           enable-stack: true
           stack-version: "latest"
 
@@ -67,23 +67,23 @@ jobs:
 
   run:
     needs: [lint, style, test]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
-        year: [2023, 2021, 2020]
+        year: [2024, 2023, 2021, 2020]
     steps:
       - name: Checkout source 📡
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Cache ~/.stack 📦
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.stack
           key: ${{ runner.os }}-stack-global-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}
           restore-keys: |
             ${{ runner.os }}-stack-global-
       - name: Cache .stack-work 📦
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .stack-work
           key: ${{ runner.os }}-stack-work-${{ hashFiles('stack.yaml') }}-${{ hashFiles('package.yaml') }}-${{ hashFiles('**/*.hs') }}
@@ -93,7 +93,7 @@ jobs:
       - name: Install Stack 📡
         uses: haskell-actions/setup@v2
         with:
-          ghc-version: 9.4.7
+          ghc-version: 9.6.6
           enable-stack: true
           stack-version: "latest"
 

@@ -126,7 +126,7 @@ rangesOverlap (start1, end1) (start2, end2) =
 intersection :: Range -> Range -> [Range]
 intersection (start1, end1) (start2, end2) =
   [ (max start1 start2, min end1 end2)
-    | rangesOverlap (start1, end1) (start2, end2)
+  | rangesOverlap (start1, end1) (start2, end2)
   ]
 
 substract :: Range -> Range -> [Range]

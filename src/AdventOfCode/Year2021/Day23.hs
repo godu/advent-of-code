@@ -68,28 +68,28 @@ neighbors (rooms, hall) = intoHall ++ outOfHall
   where
     intoHall =
       [ (rs', h')
-        | i <- [0 .. 3],
-          let room = getRoom rooms i,
-          not (null room), -- Raum schon leer
-          room /= replicate (length room) ("ABCD" !! i), -- Raum schon richtig belegt
-          let (a : as) = room,
-          j <- [0 .. 6],
-          reachable hall i j, -- ist vom Raum der Punkt in der Halle erreichbar?
-          let h' = replace hall j a,
-          let rs' = [if k == i then as else getRoom rooms k | k <- [0 .. 3]]
+      | i <- [0 .. 3],
+        let room = getRoom rooms i,
+        not (null room), -- Raum schon leer
+        room /= replicate (length room) ("ABCD" !! i), -- Raum schon richtig belegt
+        let (a : as) = room,
+        j <- [0 .. 6],
+        reachable hall i j, -- ist vom Raum der Punkt in der Halle erreichbar?
+        let h' = replace hall j a,
+        let rs' = [if k == i then as else getRoom rooms k | k <- [0 .. 3]]
       ]
     outOfHall =
       [ (rs', h')
-        | i <- [0 .. 6],
-          let a = hall !! i,
-          a /= '.',
-          let h' = replace hall i '.',
-          let j = roomFor a,
-          let r'' = rooms !! j,
-          canMoveHome r'' a,
-          canReachHome hall i j,
-          let r' = a : r'',
-          let rs' = replace rooms j r'
+      | i <- [0 .. 6],
+        let a = hall !! i,
+        a /= '.',
+        let h' = replace hall i '.',
+        let j = roomFor a,
+        let r'' = rooms !! j,
+        canMoveHome r'' a,
+        canReachHome hall i j,
+        let r' = a : r'',
+        let rs' = replace rooms j r'
       ]
 
 moveCost :: Char -> Int

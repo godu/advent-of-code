@@ -54,8 +54,7 @@ process1 = length . visite
         go map path@(End : _) = [path]
         go map path@(prev : _) =
           concatMap
-            ( go map . (: path)
-            )
+            (go map . (: path))
             $ (`restrict` path)
             $ S.toList
             $ map ! prev
@@ -83,8 +82,7 @@ process2 = length . visite
         go map path@(End : _) = [path]
         go map path@(prev : _) =
           concatMap
-            ( go map . (: path)
-            )
+            (go map . (: path))
             $ (`restrict` path)
             $ S.toList
             $ map ! prev

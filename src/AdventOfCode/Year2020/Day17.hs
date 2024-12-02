@@ -98,8 +98,7 @@ run1 =
     . fmap
       ( zip [0 ..]
           . fmap
-            ( (read :: String -> State) . singleton
-            )
+            ((read :: String -> State) . singleton)
       )
     . lines
 
@@ -155,7 +154,6 @@ run2 =
     . fmap
       ( zip [0 ..]
           . fmap
-            ( (read :: String -> State) . singleton
-            )
+            ((read :: String -> State) . singleton)
       )
     . lines

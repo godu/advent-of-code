@@ -241,8 +241,7 @@ process2 tiles = fromMaybe 0 $ do
   return $
     minimum $
       length
-        . filter (== '#')
-        . concat
+        . concatMap (filter (== '#'))
         . markMonster
         . (\(Tile _ pic) -> pic)
         <$> arrangements bigPic

@@ -90,7 +90,8 @@ process2 input =
    in sum $
         fmap (product . fmap (toInt . toExpression)) $
           filter ((== 2) . length) $
-            fmap (\symbol -> filter (near symbol) values) $
-              filter
-                (\(_, _, _, exp) -> isGear exp)
-                operators
+            ( (\symbol -> filter (near symbol) values)
+                <$> filter
+                  (\(_, _, _, exp) -> isGear exp)
+                  operators
+            )

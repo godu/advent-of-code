@@ -12,6 +12,9 @@ cradle:
     - path: "./app/Year2023.hs"
       component: "advent-of-code:exe:advent-of-code-2020-exe"
 
+    - path: "./app/Year2024.hs"
+      component: "advent-of-code:exe:advent-of-code-2020-exe"
+
     - path: "./app/Paths_advent_of_code.hs"
       component: "advent-of-code:exe:advent-of-code-2020-exe"
 
@@ -24,6 +27,9 @@ cradle:
     - path: "./app/Year2023.hs"
       component: "advent-of-code:exe:advent-of-code-2021-exe"
 
+    - path: "./app/Year2024.hs"
+      component: "advent-of-code:exe:advent-of-code-2021-exe"
+
     - path: "./app/Paths_advent_of_code.hs"
       component: "advent-of-code:exe:advent-of-code-2021-exe"
 
@@ -36,8 +42,26 @@ cradle:
     - path: "./app/Year2021.hs"
       component: "advent-of-code:exe:advent-of-code-2023-exe"
 
+    - path: "./app/Year2024.hs"
+      component: "advent-of-code:exe:advent-of-code-2023-exe"
+
     - path: "./app/Paths_advent_of_code.hs"
       component: "advent-of-code:exe:advent-of-code-2023-exe"
+
+    - path: "./app/Year2024.hs"
+      component: "advent-of-code:exe:advent-of-code-2024-exe"
+
+    - path: "./app/Year2020.hs"
+      component: "advent-of-code:exe:advent-of-code-2024-exe"
+
+    - path: "./app/Year2021.hs"
+      component: "advent-of-code:exe:advent-of-code-2024-exe"
+
+    - path: "./app/Year2023.hs"
+      component: "advent-of-code:exe:advent-of-code-2024-exe"
+
+    - path: "./app/Paths_advent_of_code.hs"
+      component: "advent-of-code:exe:advent-of-code-2024-exe"
 
     - path: "./test"
       component: "advent-of-code:test:advent-of-code-test"
