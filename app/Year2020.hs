@@ -31,7 +31,6 @@ import qualified AdventOfCode.Year2020.Day25 as Day25 (run1)
 
 main :: IO ()
 main = do
-
   do
     print "Day01"
     fixture <- readFile "app/Inputs/Year2020/Day01.txt"

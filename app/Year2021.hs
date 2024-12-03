@@ -26,12 +26,12 @@ import qualified AdventOfCode.Year2021.Day20 as Day20 (run1, run2)
 import qualified AdventOfCode.Year2021.Day21 as Day21 (run1, run2)
 import qualified AdventOfCode.Year2021.Day22 as Day22 (run1, run2)
 import qualified AdventOfCode.Year2021.Day23 as Day23 (run1, run2)
+
 -- import qualified AdventOfCode.Year2021.Day24 as Day24 (run1, run2)
 -- import qualified AdventOfCode.Year2021.Day25 as Day25 (run1)
 
 main :: IO ()
 main = do
-
   do
     print "Day01"
     fixture <- readFile "app/Inputs/Year2021/Day01.txt"
@@ -170,13 +170,13 @@ main = do
     print $ "Result #1: " <> Day23.run1 fixture
     print $ "Result #2: " <> Day23.run2 fixture
 
-  -- do
-  --   print "Day24"
-  --   fixture <- readFile "app/Inputs/Year2021/Day24.txt"
-  --   print $ "Result #1: " <> Day24.run1 fixture
-  --   print $ "Result #2: " <> Day24.run2 fixture
+-- do
+--   print "Day24"
+--   fixture <- readFile "app/Inputs/Year2021/Day24.txt"
+--   print $ "Result #1: " <> Day24.run1 fixture
+--   print $ "Result #2: " <> Day24.run2 fixture
 
-  -- do
-  --   print "Day25"
-  --   fixture <- readFile "app/Inputs/Year2021/Day25.txt"
-  --   print $ "Result #1: " <> Day25.run1 fixture
+-- do
+--   print "Day25"
+--   fixture <- readFile "app/Inputs/Year2021/Day25.txt"
+--   print $ "Result #1: " <> Day25.run1 fixture
