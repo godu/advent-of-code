@@ -15,6 +15,13 @@ description: |
 dependencies:
   - base >= 4.7 && < 5
 
+ghc-options:
+  - -Wall
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+  - -Wredundant-constraints
+  - -Wunused-packages
+
 library:
   source-dirs: src
   dependencies:
@@ -34,7 +41,6 @@ executables:
     dependencies:
       - advent-of-code
     ghc-options:
-      - -O2
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N
@@ -45,7 +51,6 @@ executables:
     dependencies:
       - advent-of-code
     ghc-options:
-      - -O2
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N
@@ -56,7 +61,6 @@ executables:
     dependencies:
       - advent-of-code
     ghc-options:
-      - -O2
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N
@@ -77,6 +81,10 @@ tests:
   advent-of-code-test:
     main: Spec.hs
     source-dirs: test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
     dependencies:
       - advent-of-code
       - hspec
