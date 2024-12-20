@@ -35,6 +35,7 @@ executables:
     dependencies:
       - advent-of-code
     ghc-options:
+      - -O2
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N
@@ -45,6 +46,7 @@ executables:
     dependencies:
       - advent-of-code
     ghc-options:
+      - -O2
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N
@@ -55,6 +57,7 @@ executables:
     dependencies:
       - advent-of-code
     ghc-options:
+      - -O2
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N
@@ -76,6 +79,7 @@ tests:
     main: Spec.hs
     source-dirs: test
     ghc-options:
+      - -O2
       - -threaded
       - -rtsopts
       - -with-rtsopts=-N

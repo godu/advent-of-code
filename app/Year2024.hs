@@ -9,8 +9,8 @@ import qualified AdventOfCode.Year2024.Day03 as Day03 (run1, run2)
 import qualified AdventOfCode.Year2024.Day04 as Day04 (run1, run2)
 import qualified AdventOfCode.Year2024.Day05 as Day05 (run1, run2)
 import qualified AdventOfCode.Year2024.Day06 as Day06 (run1, run2)
+import qualified AdventOfCode.Year2024.Day07 as Day07 (run1, run2)
 
--- import qualified AdventOfCode.Year2024.Day07 as Day07 (run1, run2)
 -- import qualified AdventOfCode.Year2024.Day08 as Day08 (run1, run2)
 -- import qualified AdventOfCode.Year2024.Day09 as Day09 (run1, run2)
 -- import qualified AdventOfCode.Year2024.Day10 as Day10 (run1, run2)
@@ -68,11 +68,11 @@ main = do
     print $ "Result #1: " <> Day06.run1 fixture
     print $ "Result #2: " <> Day06.run2 fixture
 
--- do
---   print "Day07"
---   fixture <- readFile "app/Inputs/Year2024/Day07.txt"
---   print $ "Result #1: " <> Day07.run1 fixture
---   print $ "Result #2: " <> Day07.run2 fixture
+  do
+    print "Day07"
+    fixture <- readFile "app/Inputs/Year2024/Day07.txt"
+    print $ "Result #1: " <> Day07.run1 fixture
+    print $ "Result #2: " <> Day07.run2 fixture
 
 -- do
 --   print "Day08"
